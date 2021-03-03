@@ -6,8 +6,8 @@ import { Language } from '../models/language';
 
 import { ContextService } from './context';
 
-import { Observable, of, from, forkJoin } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
+import { mergeMap, map, } from 'rxjs/operators';
 
 /**
  * @file PokeApiService.ts
@@ -20,6 +20,26 @@ import { mergeMap, map } from 'rxjs/operators';
  */
 @Injectable()
 export class PokeApiService {
+  //#region Const
+
+  readonly AVAILABLE_LANG_MAP: {[key: string]: number} = {
+    'ja-Hrkt': 1,
+    roomaji: 2,
+    ko: 3,
+    'zh-Hant': 4,
+    fr: 5,
+    de: 6,
+    es: 7,
+    it: 8,
+    en: 9,
+    cs: 10,
+    ja: 11,
+    'zh-Hans': 12,
+    'pt-BR': 13
+  };
+
+  //#endregion
+
   //#region Properties
 
   get pokeApi(): { baseUrl: string, defaultHeaders: { [key: string]: string } } {
@@ -39,27 +59,11 @@ export class PokeApiService {
 
   //#region Methods
 
-  getLanguages(): Observable<Language> {
-    const langMap: {[key: string]: number} = {
-      'ja-Hrkt': 1,
-      roomaji: 2,
-      ko: 3,
-      'zh-Hant': 4,
-      fr: 5,
-      de: 6,
-      es: 7,
-      it: 8,
-      en: 9,
-      cs: 10,
-      ja: 11,
-      'zh-Hans': 12,
-      'pt-BR': 13
-    };
-
+  getLanguages(): Observable<Language[]> {
     const userLang = navigator.language;
-    const iso639 = langMap[userLang] ? userLang : 'en';
+    const iso639 = this.AVAILABLE_LANG_MAP[userLang] ? userLang : 'en';
 
-    this.http
+    return this.http
       .get<{
         count: number,
         results: {name: string, url: string}[]
@@ -77,10 +81,8 @@ export class PokeApiService {
           });
           
           return forkJoin( requests$ );
-        })
+        }),
       );
-
-    return from([]);
   }
 
   getLanguage(

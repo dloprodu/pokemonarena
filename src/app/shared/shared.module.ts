@@ -1,14 +1,15 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { APP_INITIALIZER, NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import * as services from './services';
+import { ContextService, StorageService, PokeApiService } from './services';
 
 const servicesList = [
-  services.ContextService,
-  services.StorageService,
-  services.PokeApiService,
+  ContextService,
+  StorageService,
+  PokeApiService,
 ];
 
 /**
@@ -20,6 +21,7 @@ const servicesList = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule,
   ],
 })
@@ -29,7 +31,23 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         ...servicesList,
+        // APP_INITIALIZER
+        {
+          provide: APP_INITIALIZER,
+          useFactory: CoreInitializer,
+          deps: [ContextService],
+          multi: true
+        },
       ]
     };
   }
+}
+
+
+export function CoreInitializer(context: ContextService) {
+  const fn = async () => {
+    context.load();
+  };
+
+  return fn;
 }

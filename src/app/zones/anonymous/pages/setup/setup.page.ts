@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 
 import { PageComponent } from '@app/shared';
+import { PokeApiService } from '@app/shared/services';
 
 @Component({
   selector: 'page-setup',
@@ -24,6 +25,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   //#region Constructor
 
   constructor(
+    private pokeApi: PokeApiService
   ) {
     super();
   }
@@ -34,6 +36,14 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.pokeApi
+      .getLanguages()
+      .subscribe(res => {
+        console.log(res);
+      }, err => {
+        console.error(err);
+      });
   }
 
   ngOnDestroy() {
