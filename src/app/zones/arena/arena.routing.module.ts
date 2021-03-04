@@ -12,7 +12,7 @@ const routes: Routes = [
     path: '',
     children: [
       // Pages
-      { path: 'arena-basic', component: ArenaBasicPage, },
+      { path: 'arena-html', component: ArenaBasicPage, },
       { path: 'arena-canvas', component: ArenaCanvasPage, },
     ]
   }

@@ -23,6 +23,9 @@ export const environment = {
           'Content-Type': 'application/json'
         },
       },
+      translations: {
+        baseUrl: '/assets/i18n',
+      }
     },
   },
 };

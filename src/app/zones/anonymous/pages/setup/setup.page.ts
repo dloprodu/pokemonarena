@@ -3,6 +3,7 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PageComponent } from '@app/shared';
 import { PokeApiService, ContextService, ThemeManagerService } from '@app/shared/services';
@@ -60,7 +61,8 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   constructor(
     private context: ContextService,
     private pokeApi: PokeApiService,
-    private themeManager: ThemeManagerService
+    private themeManager: ThemeManagerService,
+    private router: Router
   ) {
     super();
   }
@@ -107,6 +109,18 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     // this.nativeLanguage = this.languages.find(lang => lang.code === this.context.instance.language).name;
 
     window.location.href = `${window.location.origin}/${this.language}`;
+  }
+
+  onPlayClick() {
+    switch (this.render) {
+      case 'html':
+        this.router.navigate([`/${this.context.instance.language}/arena/arena-html`]);
+        break;
+
+      case 'canvas':
+        this.router.navigate([`/${this.context.instance.language}/arena/arena-canvas`]);
+        break;
+    }
   }
 
   //#endregion

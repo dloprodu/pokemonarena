@@ -45,6 +45,12 @@ export class SharedModule {
           deps: [ContextService],
           multi: true
         },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: ThemeInitializer,
+          deps: [ThemeManagerService],
+          multi: true
+        },
       ]
     };
   }
@@ -54,6 +60,16 @@ export class SharedModule {
 export function CoreInitializer(context: ContextService) {
   const fn = async () => {
     context.load();
+  };
+
+  return fn;
+}
+
+
+
+export function ThemeInitializer(theme: ThemeManagerService) {
+  const fn = async () => {
+    theme.load();
   };
 
   return fn;

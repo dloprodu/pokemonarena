@@ -1,0 +1,55 @@
+.battlefield {
+  border: 2px solid #556B2F;
+  background: green;
+  width: 800px;
+  height: 480px;
+  background-image: url("/assets/images/battlefield.png");
+  position: relative;
+
+  .player {
+    position: absolute;
+    bottom: 80px;
+    left: 160px;
+    scale: 2;
+  }
+
+  .player-details {
+    background: #FFFACD;
+    border: 4px solid #556B2F;
+    border-top-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    width: 200px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0.25rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .opponent {
+    position: absolute;
+    top: 200px;
+    right: 200px;
+  }
+  
+  .player-details.opponent-details {
+    bottom: auto;
+    left: auto;
+    top: 160px;
+    right: 60px;
+  }
+}
+
+.attacks-box {
+  width: 800px;
+
+  div {
+    border-radius: 0;
+    border: 2px solid #483D8B;
+  }
+}

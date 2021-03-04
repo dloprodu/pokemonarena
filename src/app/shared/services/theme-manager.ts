@@ -45,6 +45,10 @@ export class ThemeManagerService {
 
   //#region Methods
 
+  public load() {
+    this.refreshBody();
+  }
+
   public getTheme(): ThemeType {
     return this.theme;
   }

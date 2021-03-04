@@ -1,0 +1,15 @@
+.battlefield {
+  border: 2px solid #556B2F;
+  background: greenyellow;
+  width: 800px;
+  height: 480px;
+  position: relative;
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 480px;
+  }
+}
