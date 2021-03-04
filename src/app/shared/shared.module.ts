@@ -4,12 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ContextService, StorageService, PokeApiService } from './services';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { ContextService, StorageService, PokeApiService, ThemeManagerService } from './services';
 
 const servicesList = [
   ContextService,
   StorageService,
   PokeApiService,
+  ThemeManagerService
 ];
 
 /**
@@ -23,7 +26,11 @@ const servicesList = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
+    TranslateModule,
   ],
+  exports: [
+    TranslateModule
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {

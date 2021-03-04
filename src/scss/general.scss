@@ -9,9 +9,21 @@ body {
   overflow: hidden;
   touch-action: pan-y;
 
-  background: #F5F5F5;
-  background: linear-gradient(
-    to bottom,
-    #F5F5F5 0,
-    #f8f9fa 100%);
+  &, &.light {
+    background: #F5F5F5;
+    background: linear-gradient(
+      to bottom,
+      #F5F5F5 0,
+      #f8f9fa 100%);
+  }
+
+  &.dark {
+    background: #333;
+    background: linear-gradient(
+      to bottom,
+      #333 0,
+      #444 100%);
+
+    color: #F5F5F5;
+  }
 }

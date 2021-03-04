@@ -9,7 +9,7 @@ export class Context {
   assets!: {[key: string]: { baseUrl: string, defaultHeaders: { [key: string]: string } }}[];
 
   get STORAGE_LANGUAGE(): string {
-    return 'UTVDSJYHGZDEMIWQDXRCBKNLXX';
+    return 'language';
   }
 
   /**

@@ -1,1 +1,28 @@
-<h1>Setup Page</h1>
+<h1>Pokemon Arena - <small>{{ 'setup-page' | translate }}</small> </h1>
+<form>
+  <div class="form-group">
+    <label for="theme-selector">{{ 'choose-theme' | translate }}</label>
+    <select class="form-control" id="theme-selector" name="theme" [(ngModel)]="theme" (ngModelChange)="onThemeChange($event)">
+      <ng-template ngFor let-item [ngForOf]="themes">
+        <option [value]="item.value" >{{ item.label | translate }}</option>
+      </ng-template>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="lang-selector">{{ 'choose-language' | translate }}</label>
+    <select class="form-control" id="lang-selector" name="language" [(ngModel)]="language" (ngModelChange)="onLanguageChange($event)">
+      <ng-template ngFor let-item [ngForOf]="languages">
+        <option [value]="item.code" >{{ item.name }}</option>
+      </ng-template>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="render-selector">{{ 'choose-render' | translate }}</label>
+    <select class="form-control" id="render-selector" name="render" [(ngModel)]="render">
+      <ng-template ngFor let-item [ngForOf]="renders">
+        <option [value]="item.value" >{{ item.label | translate }}</option>
+      </ng-template>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-secondary btn-lg">{{ 'play' | translate }}</button>
+</form>

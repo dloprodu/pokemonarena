@@ -1,3 +1,9 @@
 {
-  
+  "setup-page": "Pagina de configuración",
+  "choose-theme": "Elige tu tema",
+  "choose-language": "Elige tu idioma",
+  "choose-render": "Elige el tipo de render",
+  "dark": "Oscuro",
+  "light": "Claro",
+  "play": "Jugar"
 }

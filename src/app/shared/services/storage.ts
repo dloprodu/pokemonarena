@@ -28,7 +28,7 @@ export class StorageService {
 
   //#region Fields
 
-  private _spaceName = '';
+  private _spaceName = 'pokemon-arena';
 
   //#endregion
 

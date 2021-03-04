@@ -37,14 +37,15 @@ export class LanguageGuard implements CanActivate, CanActivateChild {
 
   private checkLanguage(url: string): boolean {
     // route: `/:mandator/:language/...`
-    const context = this.context.getInstance<Context>();
     const urlTree = this.router.parseUrl(url);
     const urlSegments = urlTree.root.children?.[PRIMARY_OUTLET]?.segments ?? [];
     const urlLanguage = (urlSegments?.[0]?.path ?? '').toLocaleLowerCase();
 
     // Check URL language - if `languages` is not defined, that is a backend wrong settigns.
     if (!urlLanguage || !this.pokeApi.AVAILABLE_LANG_MAP[urlLanguage]) {
-      const userLang = this.pokeApi.AVAILABLE_LANG_MAP[navigator.language] ? navigator.language : 'en';
+      const userLang = this.pokeApi.AVAILABLE_LANG_MAP[this.context.getStoredLanguage()]
+        ? this.context.getStoredLanguage()
+        : this.pokeApi.AVAILABLE_LANG_MAP[navigator.language] ? navigator.language : 'en';
 
       // Force to reload the page.
       window.location.href = `${window.location.origin}/${userLang}`;
@@ -57,6 +58,7 @@ export class LanguageGuard implements CanActivate, CanActivateChild {
     if (this.context.instance.language !== urlLanguage) {
       this.context.setLanguage(urlLanguage);
       this.translate.use(urlLanguage);
+      this.translate.setDefaultLang('en');
     }
 
     return true;

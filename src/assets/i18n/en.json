@@ -1,3 +1,9 @@
 {
-  
+  "setup-page": "Setup Page",
+  "choose-theme": "Choose your theme",
+  "choose-language": "Choose your language",
+  "choose-render": "Choose the render type",
+  "dark": "Dark",
+  "light": "Light",
+  "play": "Play"
 }
