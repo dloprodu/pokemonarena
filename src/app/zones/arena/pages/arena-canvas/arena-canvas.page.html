@@ -1,4 +1,12 @@
 <h1>Arena Canvas Page</h1>
 <div class="battlefield shadow-sm text-body">
-  <canvas #canvas></canvas>
+  <canvas #canvas width="800" height="480"></canvas>
+</div>
+<div class="attacks-box text-body">
+  <div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 1</button>
+    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 2</button>
+    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 3</button>
+    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 4</button>
+  </div>
 </div>

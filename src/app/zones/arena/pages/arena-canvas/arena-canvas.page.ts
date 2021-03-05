@@ -9,6 +9,8 @@ import {
 
 import { PageComponent } from '@app/shared';
 
+import { BattlefieldRender } from './battlefield-render';
+
 @Component({
   selector: 'page-arena-canvas',
   templateUrl: 'arena-canvas.page.html',
@@ -29,6 +31,12 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   get pageName(): string {
     return 'Arena Canvas';
   }
+
+  //#endregion
+
+  //#region Fields
+
+  private render?: BattlefieldRender;
 
   //#endregion
 
@@ -54,6 +62,8 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   ngAfterViewInit() {
     // this.canvas.nativeElement.width = 800;
     // this.canvas.nativeElement.height = 480;
+    this.render = new BattlefieldRender(this.canvas.nativeElement);
+    this.render.invalidate();
   }
 
   //#endregion
@@ -62,6 +72,14 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
 
   public hasChanges(): boolean {
     return false;
+  }
+
+  //#endregion
+
+  //#region Events Handlers
+
+  onAttackClick() {
+    // TODO
   }
 
   //#endregion
