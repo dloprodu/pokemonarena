@@ -63,7 +63,7 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
     // this.canvas.nativeElement.width = 800;
     // this.canvas.nativeElement.height = 480;
     this.render = new BattlefieldRender(this.canvas.nativeElement);
-    this.render.invalidate();
+    this.render.init();
   }
 
   //#endregion
@@ -79,7 +79,7 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   //#region Events Handlers
 
   onAttackClick() {
-    // TODO
+    this.render?.animatePlayer();
   }
 
   //#endregion

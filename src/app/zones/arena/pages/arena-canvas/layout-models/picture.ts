@@ -1,6 +1,9 @@
-import { RenderableShape, RenderableToolbox } from './renderable-shape';
+import { RenderableToolbox } from './renderable-shape';
+import { Rectangle } from './rectangle';
 
-export class Picture extends RenderableShape {
+export class Picture extends Rectangle {
+  readonly img = new Image();
+
   constructor(
     public url: string,
     public x: number,
@@ -11,10 +14,21 @@ export class Picture extends RenderableShape {
       fill: '#8FBC8F'
     }
   ) {
-    super(toolbox);
+    super(x, y, w, h, toolbox);
+  }
+  
+  public load(): Promise<void> {
+    return new Promise((resolve) => {
+      this.img.onload = () => {
+        resolve();
+      };
+      this.img.onerror = () => {
+        resolve();
+      };
+      this.img.src = this.url;
+    });
   }
 
-  
   public draw(ctx: CanvasRenderingContext2D): Promise<void> {
     return new Promise((resolve) => {
       if (!this.url) {
@@ -22,15 +36,8 @@ export class Picture extends RenderableShape {
         return;
       }
   
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, this.x, this.y, this.w, this.h);
-        resolve();
-      };
-      img.onerror = () => {
-        resolve();
-      };
-      img.src = this.url;
+      ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+      resolve();
     });
   }
 }
