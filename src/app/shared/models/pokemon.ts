@@ -10,7 +10,7 @@ export interface Pokemon extends HasId, HasName, HasOrder {
   sprites: {
     back?: string;
     front?: string;
-  },
+  };
   height: number;
   weight: number;
   moves: string[];

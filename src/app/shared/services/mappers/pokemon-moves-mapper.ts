@@ -11,7 +11,7 @@ export class PokemonMoveMapper {
       return null;
     }
 
-    const effect = 
+    const effect =
          response.effect_entries?.find(el => el.language.name === iso639)
       ?? response.effect_entries?.find(el => el.language.name === 'en');
 

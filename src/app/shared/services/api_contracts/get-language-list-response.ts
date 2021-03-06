@@ -1,4 +1,4 @@
 export interface GetLanguageListResponse {
-  count: number,
-  results: {name: string, url: string}[]
+  count: number;
+  results: {name: string, url: string}[];
 }

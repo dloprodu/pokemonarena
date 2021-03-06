@@ -60,17 +60,19 @@ export class ArenaBasicPage extends PageComponent implements OnInit, OnDestroy {
 
   //#endregion
 
-  //#region 
+  //#region
 
   private animateCSS(node: HTMLElement, animationName: string, callback?: () => void) {
     node.classList.add('animate__animated', animationName);
 
     const handleAnimationEnd = () => {
       node.classList.remove('animate__animated', animationName);
-      node.removeEventListener('animationend', handleAnimationEnd)
+      node.removeEventListener('animationend', handleAnimationEnd);
 
-      if (typeof callback === 'function') callback();
-    }
+      if (typeof callback === 'function') {
+        callback();
+      }
+    };
 
     node.addEventListener('animationend', handleAnimationEnd);
   }

@@ -13,59 +13,59 @@ export class UIRectangle extends UIShape {
     super(toolbox);
   }
 
-  public getLeft() {
+  public getLeft(): number {
     return this.x;
   }
 
-  public getRight() {
+  public getRight(): number {
     return this.x + this.w;
   }
 
-  public getTop() {
+  public getTop(): number {
     return this.y;
   }
 
-  public getBottom() {
+  public getBottom(): number {
     return this.y + this.h;
   }
 
-  public getCenterY() {
+  public getCenterY(): number {
     return (this.getTop() + this.getBottom()) / 2;
   }
 
-  public getCenterX() {
+  public getCenterX(): number {
     return (this.getLeft() + this.getRight()) / 2;
   }
 
-  public offset(x: number, y: number) {
+  public offset(x: number, y: number): void {
     if (!isNaN(x) && !isNaN(y)) {
       this.x += x;
       this.y += y;
     }
   }
 
-  public toString() {
+  public toString(): string {
     return (
       '[' + this.x + ', ' + this.y + '] - ' + '(' + this.w + ', ' + this.h + ')'
     );
   }
 
-  public inflate(w: number, h: number) {
+  public inflate(w: number, h: number): void {
     this.x -= w;
     this.y -= h;
     this.w += 2 * w;
     this.h += 2 * h;
   }
 
-  public getArea() {
+  public getArea(): number {
     return this.w * this.h;
   }
 
-  public getPerimeter() {
+  public getPerimeter(): number {
     return 2 * this.getArea();
   }
 
-  public contains(x: number, y: number) {
+  public contains(x: number, y: number): boolean {
     if (x < this.x || y < this.y || x > this.x + this.w || y > this.y + this.h) {
       return false;
     }
@@ -79,7 +79,7 @@ export class UIRectangle extends UIShape {
       }
 
       if (this.toolbox.fill != null) {
-        ctx.fillStyle = this.toolbox.fill;  
+        ctx.fillStyle = this.toolbox.fill;
         ctx.fillRect(this.x, this.y, this.w, this.h);
       }
 

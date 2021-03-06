@@ -45,7 +45,7 @@ export class UILabel extends UIRectangle {
       ctx.closePath();
 
       if (this.toolbox.fill != null) {
-        ctx.fillStyle = this.toolbox.fill
+        ctx.fillStyle = this.toolbox.fill;
         ctx.fill();
       }
 
@@ -59,19 +59,19 @@ export class UILabel extends UIRectangle {
     });
   }
 
-  public drawText(ctx: CanvasRenderingContext2D) {
-    ctx.font="bold 16px Open Sans";
-    ctx.textAlign="left"; 
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#000000";
+  public drawText(ctx: CanvasRenderingContext2D): void {
+    ctx.font = 'bold 16px Open Sans';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#000000';
 
     const caption = this.text?.length > 12
       ? `${this.text.substr(0, 9)}...`
       : this.text;
 
-    ctx.fillText(caption?.toUpperCase(), this.x + 6, this.y + (this.h/2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
-    
-    ctx.textAlign="end";     
-    ctx.fillText("100 / 100", this.x + this.w - 6, this.y + (this.h/2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
+    ctx.fillText(caption?.toUpperCase(), this.x + 6, this.y + (this.h / 2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
+
+    ctx.textAlign = 'end';
+    ctx.fillText('100 / 100', this.x + this.w - 6, this.y + (this.h / 2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
   }
 }

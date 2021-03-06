@@ -16,7 +16,7 @@ export class UIPicture extends UIRectangle {
   ) {
     super(x, y, w, h, toolbox);
   }
-  
+
   public load(): Promise<void> {
     return new Promise((resolve) => {
       this.img.onload = () => {
@@ -35,7 +35,7 @@ export class UIPicture extends UIRectangle {
         resolve();
         return;
       }
-  
+
       ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
       resolve();
     });

@@ -1,5 +1,6 @@
 export const environment = {
-  production: false,context: {
+  production: false,
+  context: {
     auth: {
       baseUrl: 'TODO',
       defaultHeaders: {

@@ -30,7 +30,6 @@ import { mergeMap, map, tap } from 'rxjs/operators';
 
 /**
  * @file PokeApiService.ts
- * @module app.share
  * @summary Poke API service.
  * @description
  *
@@ -111,9 +110,9 @@ export class PokeApiService {
         mergeMap(result => {
           const requests$: Observable<Language>[] = [];
           result.body?.results?.forEach(item => {
-            requests$.push( this.getLanguage(item, iso639) )
+            requests$.push( this.getLanguage(item, iso639) );
           });
-          
+
           return forkJoin( requests$ );
         }),
         tap(data => this.cache[url] = data)
@@ -135,14 +134,11 @@ export class PokeApiService {
           observe: 'response'
         }
       ).pipe(
-        map(result => {
-          const item: Language = {
-            id: result.body?.id,
-            code: result.body?.iso639,
-            name: result.body?.names?.find(el => el.language.name === iso639)?.name ?? result.body?.iso639
-          };
-          return item;
-        })
+        map((result): Language => ({
+          id: result.body?.id,
+          code: result.body?.iso639,
+          name: result.body?.names?.find(el => el.language.name === iso639)?.name ?? result.body?.iso639
+        }))
       );
   }
 
@@ -201,12 +197,12 @@ export class PokeApiService {
     }
 
     const requests$: Observable<PokemonMove | null>[] = [];
-    moves.forEach((move: string | number) => requests$.push( this.getPokemonMove(move) ) )
+    moves.forEach((move: string | number) => requests$.push( this.getPokemonMove(move) ) );
 
     return forkJoin( requests$ )
       .pipe(
         map(result => result.filter(el => el != null) as PokemonMove[])
-      )
+      );
   }
 
   /**
@@ -257,7 +253,7 @@ export class PokeApiService {
           }
 
           const requests$: Observable<PokemonTypeInfo | null>[] = [];
-          result.body.results.forEach(type => requests$.push( this.getPokemonTypeInfo(type.name) ) )
+          result.body.results.forEach(type => requests$.push( this.getPokemonTypeInfo(type.name) ) );
 
           return forkJoin( requests$ );
         }),

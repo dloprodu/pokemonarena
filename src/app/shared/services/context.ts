@@ -17,14 +17,14 @@ export class ContextService {
   //#region Properties
 
   get instance(): Context {
-    return this._context!;
+    return this._instance;
   }
 
   //#endregion
 
   //#region Fields
 
-  private _context?: Context;
+  private _instance!: Context;
 
   //#endregion
 
@@ -47,12 +47,12 @@ export class ContextService {
   //#region Methods
 
   public async load() {
-    this._context = await Context.factory();
-    this._ready.emit(this._context);
+    this._instance = await Context.factory();
+    this._ready.emit(this._instance);
   }
 
   public getInstance<T extends Context>(): T {
-    return this._context as T;
+    return this._instance as T;
   }
 
   /**

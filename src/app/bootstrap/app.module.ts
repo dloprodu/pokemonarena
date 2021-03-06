@@ -38,9 +38,9 @@ export class AppModule { }
  * Creates a TranslateHttpLoader.
  *
  * @export
- * @param {HttpClient} http The HTTP client.
+ * @param http The HTTP client.
  * @returns A TranslateHttpLoader instance.
  */
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, environment.context.assets['translations'].baseUrl + '/', `.json`);
+  return new TranslateHttpLoader(http, environment.context.assets.translations.baseUrl + '/', `.json`);
 }

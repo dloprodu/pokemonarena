@@ -35,10 +35,10 @@ export class BattlefieldRender {
       throw new ReferenceError();
     }
 
-    this.canvas.onmousedown = this.handle_mouseDown;
-    this.canvas.onmouseup = this.handle_mouseUp;
-    this.canvas.onmousemove = this.handle_mouseMove;
-    this.canvas.onmouseleave = this.handle_mouseLeave;
+    this.canvas.onmousedown = this.handleMouseDown;
+    this.canvas.onmouseup = this.handleMouseUp;
+    this.canvas.onmousemove = this.handleMouseMove;
+    this.canvas.onmouseleave = this.handleMouseLeave;
 
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D ;
     this.WIDTH = this.canvas.width;
@@ -51,7 +51,7 @@ export class BattlefieldRender {
 
   public async init() {
     if (!this.ctx) {
-      throw 'Canvas context undefined';
+      throw new Error('Canvas context undefined');
     }
 
     this.WIDTH = this.canvas.width;
@@ -109,7 +109,9 @@ export class BattlefieldRender {
     // Add stuff you want drawn on top all the time here
     this.valid = true;
 
-    if (callback) callback();
+    if (callback) {
+      callback();
+    }
   }
 
   public animate(character: UIPicture, jumpsCount = 2, jumpHeight = 28, jumpDecrement = 8) {
@@ -131,7 +133,7 @@ export class BattlefieldRender {
       }
 
       character.offset(0, dy);
-      
+
       this.valid = false;
       this.draw(() => window.requestAnimationFrame(checkAnimation));
     };
@@ -143,7 +145,7 @@ export class BattlefieldRender {
 
   //#region Event Handlers
 
-  protected handle_mouseDown = () => {
+  protected handleMouseDown = () => {
     switch (this.canvas.style.cursor) {
       case 'move':
       case 'nw-resize':
@@ -162,15 +164,15 @@ export class BattlefieldRender {
     }
   }
 
-  protected handle_mouseUp = () => {
+  protected handleMouseUp = () => {
     // TODO
   }
 
-  protected handle_mouseMove = (e: MouseEvent) => {
+  protected handleMouseMove = (e: MouseEvent) => {
     // TODO
   }
 
-  protected handle_mouseLeave = () => {
+  protected handleMouseLeave = () => {
     // TODO
   }
 
