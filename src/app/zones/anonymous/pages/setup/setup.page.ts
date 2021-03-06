@@ -75,7 +75,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     super.ngOnInit();
 
     this.pokeApi
-      .getLanguages()
+      .getLanguageList()
       .subscribe(res => {
         this.languages = res;
       }, err => {

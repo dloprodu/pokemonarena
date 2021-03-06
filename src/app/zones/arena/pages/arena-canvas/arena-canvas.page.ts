@@ -7,7 +7,7 @@ import {
   ElementRef
 } from '@angular/core';
 
-import { PageComponent } from '@app/shared';
+import { PageComponent, PokeApiService } from '@app/shared';
 
 import { BattlefieldRender } from './battlefield-render';
 
@@ -43,6 +43,7 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   //#region Constructor
 
   constructor(
+    private pokeApi: PokeApiService
   ) {
     super();
   }
@@ -53,6 +54,30 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.pokeApi
+      .getPokemonList(1000)
+      .subscribe(result => {
+        console.log(result);
+      }, err => {
+        console.error(err);
+      });
+
+    this.pokeApi
+      .getPokemonMovesList(['mega-punch', 'pay-day', 'thunder-punch'])
+      .subscribe(result => {
+        console.log(result);
+      }, err => {
+        console.error(err);
+      });
+
+    this.pokeApi
+      .getPokemonTypeInfoList()
+      .subscribe(result => {
+        console.log(result);
+      }, err => {
+        console.error(err);
+      });
   }
 
   ngOnDestroy() {

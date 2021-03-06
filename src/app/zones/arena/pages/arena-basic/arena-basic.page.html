@@ -1,26 +1,28 @@
 <h1>Arena HTML Page</h1>
 
-<div class="battlefield shadow-sm text-body">
-  <div class="player">
-    <img #player src="/assets/images/pikachu_back.png">
+<div class="shadow d-inline-block">
+  <div class="battlefield text-body">
+    <div class="player">
+      <img #player src="/assets/images/pikachu_back.png">
+    </div>
+    <div class="player-details">
+      <span>Pikachu</span>
+      <span>100 / 100</span>
+    </div>
+    <div class="opponent">
+      <img #opponent src="/assets/images/ditto_front.png">
+    </div>
+    <div class="player-details opponent-details">
+      <span>Ditto</span>
+      <span>100 / 100</span>
+    </div>
   </div>
-  <div class="player-details shadow">
-    <span>Pikachu</span>
-    <span>100 / 100</span>
-  </div>
-  <div class="opponent">
-    <img #opponent src="/assets/images/ditto_front.png">
-  </div>
-  <div class="player-details opponent-details shadow">
-    <span>Ditto</span>
-    <span>100 / 100</span>
-  </div>
-</div>
-<div class="attacks-box text-body">
-  <div class="list-group">
-    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 1</button>
-    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 2</button>
-    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 3</button>
-    <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 4</button>
+  <div class="attacks-box text-body">
+    <div class="list-group">
+      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 1</button>
+      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 2</button>
+      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 3</button>
+      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick()">Attack 4</button>
+    </div>
   </div>
 </div>
