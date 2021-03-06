@@ -1,7 +1,7 @@
-import { Rectangle } from './rectangle';
-import { RenderableToolbox } from './renderable-shape';
+import { UIRectangle } from './ui-rectangle';
+import { UIToolbox } from './ui-shape';
 
-export class Label extends Rectangle {
+export class UILabel extends UIRectangle {
   public radius = 12;
 
   constructor(
@@ -10,7 +10,7 @@ export class Label extends Rectangle {
     y: number,
     w: number,
     h: number,
-    toolbox: RenderableToolbox = {
+    toolbox: UIToolbox = {
       stroke: '#556B2F',
       strokeWidth: 4,
       fill: '#FFFACD'

@@ -1,6 +1,6 @@
-import { Picture } from './layout-models/picture';
-import { Rectangle } from './layout-models/rectangle';
-import { Label } from './layout-models/label';
+import { UIPicture } from './layout-models/ui-picture';
+import { UIRectangle } from './layout-models/ui-rectangle';
+import { UILabel } from './layout-models/ui-label';
 
 /**
  * Renders the battlefield scenario.
@@ -12,14 +12,14 @@ export class BattlefieldRender {
   private valid = false;
   protected ctx!: CanvasRenderingContext2D;
 
-  protected background!: Picture;
-  protected bounds!: Rectangle;
+  protected background!: UIPicture;
+  protected bounds!: UIRectangle;
 
-  protected player!: Picture;
-  protected playerDetail!: Label;
+  protected player!: UIPicture;
+  protected playerDetail!: UILabel;
 
-  protected opponent!: Picture;
-  protected opponentDetails!: Label;
+  protected opponent!: UIPicture;
+  protected opponentDetails!: UILabel;
 
   protected WIDTH: number;
   protected HEIGHT: number;
@@ -57,7 +57,7 @@ export class BattlefieldRender {
     this.WIDTH = this.canvas.width;
     this.HEIGHT = this.canvas.height;
 
-    this.bounds = new Rectangle(
+    this.bounds = new UIRectangle(
       0,
       0,
       this.WIDTH,
@@ -65,13 +65,13 @@ export class BattlefieldRender {
       { fill: '#8FBC8F' }
     );
 
-    this.background = new Picture('/assets/images/battlefield.png', 0, 0, 800, 480);
+    this.background = new UIPicture('/assets/images/battlefield.png', 0, 0, 800, 480);
 
-    this.player = new Picture('/assets/images/pikachu_back.png', 160, 300, 96, 96);
-    this.playerDetail = new Label('Pikachu', 16, 426, 200, 36);
+    this.player = new UIPicture('/assets/images/pikachu_back.png', 160, 300, 96, 96);
+    this.playerDetail = new UILabel('Pikachu', 16, 426, 200, 36);
 
-    this.opponent = new Picture('/assets/images/ditto_front.png', 500, 200, 96, 96);
-    this.opponentDetails = new Label('DITTO', 540, 160, 200, 36);
+    this.opponent = new UIPicture('/assets/images/ditto_front.png', 500, 200, 96, 96);
+    this.opponentDetails = new UILabel('DITTO', 540, 160, 200, 36);
 
     await this.background.load();
     await this.player.load();
@@ -112,7 +112,7 @@ export class BattlefieldRender {
     if (callback) callback();
   }
 
-  public animate(character: Picture, jumpsCount = 2, jumpHeight = 28, jumpDecrement = 8) {
+  public animate(character: UIPicture, jumpsCount = 2, jumpHeight = 28, jumpDecrement = 8) {
     let dy = -3; // increment
     const source = character.y;
 

@@ -1,7 +1,7 @@
-import { RenderableToolbox } from './renderable-shape';
-import { Rectangle } from './rectangle';
+import { UIToolbox } from './ui-shape';
+import { UIRectangle } from './ui-rectangle';
 
-export class Picture extends Rectangle {
+export class UIPicture extends UIRectangle {
   readonly img = new Image();
 
   constructor(
@@ -10,7 +10,7 @@ export class Picture extends Rectangle {
     public y: number,
     public w: number,
     public h: number,
-    toolbox: RenderableToolbox = {
+    toolbox: UIToolbox = {
       fill: '#8FBC8F'
     }
   ) {

@@ -11,28 +11,28 @@ export interface PokemonMove extends HasId, HasName, HasDescription, HasShortDes
   /**
    * Name in the selected language.
    */
-  localizedName?: string;
+  localizedName: string;
 
   /**
    * The percent value of how likely this move is to be successful.
    */
-  accuracy?: number;
+  accuracy: number;
 
   /**
    * Power points. The number of times this move can be used.
    */
-  pp?: number;
+  pp: number;
 
   /**
    * The base power of this move with a value of 0 if it does not have a base power.
    * It helps determine how much damage they deal.
    */
-  power?: number;
+  power: number;
 
   /**
    * The category of move this move falls under, e.g. damage or ailment.
    */
-  category?: MoveCategory;
+  category: MoveCategory;
 
   /**
    * The type of damage the move inflicts on the target, e.g. physical.
@@ -42,5 +42,5 @@ export interface PokemonMove extends HasId, HasName, HasDescription, HasShortDes
   /**
    * The elemental type of this move.
    */
-  type?: PokemonType;
+  type: PokemonType;
 }

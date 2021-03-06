@@ -18,7 +18,7 @@ export class PokemonMoveMapper {
     return {
       id: response.id,
       name: response.name,
-      localizedName: response.names?.find(el => el.language.name === iso639)?.name,
+      localizedName: response.names?.find(el => el.language.name === iso639)?.name ?? '',
       description: effect?.effect ?? '',
       shortDescription: effect?.short_effect ?? '',
       accuracy: response.accuracy,

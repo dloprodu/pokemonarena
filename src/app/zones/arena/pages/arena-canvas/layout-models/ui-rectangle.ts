@@ -1,12 +1,12 @@
-import { RenderableShape, RenderableToolbox } from './renderable-shape';
+import { UIShape, UIToolbox } from './ui-shape';
 
-export class Rectangle extends RenderableShape {
+export class UIRectangle extends UIShape {
   constructor(
     public x: number,
     public y: number,
     public w: number,
     public h: number,
-    toolbox: RenderableToolbox = {
+    toolbox: UIToolbox = {
       fill: '#8FBC8F'
     }
   ) {
