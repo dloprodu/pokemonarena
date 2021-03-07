@@ -5,6 +5,22 @@
   height: 484px;
   position: relative;
 
+  .battlefield-caption {
+    display: inline-block;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 1rem;
+    background: rgba(85, 107, 47, 0.8);
+    border: 2px solid #556B2F;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 2;
+  }
+
   canvas {
     position: absolute;
     top: 0;
@@ -16,9 +32,4 @@
 
 .attacks-box {
   width: 804px;
-
-  div {
-    border-radius: 0;
-    border: 2px solid #483D8B;
-  }
 }

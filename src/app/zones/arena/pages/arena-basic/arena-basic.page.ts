@@ -1,23 +1,29 @@
 import {
   Component,
+  ViewChild,
+  ElementRef,
   OnInit,
   OnDestroy,
-  ViewChild,
-  ElementRef
+  AfterViewInit
 } from '@angular/core';
 
-import { PageComponent } from '@app/shared';
+import { PokeApiService } from '@app/shared';
+import { PokemonMove } from '@app/shared/models';
+
+import { ArenaBasePage } from '../arena-base-page';
 
 @Component({
   selector: 'page-arena-basic',
   templateUrl: 'arena-basic.page.html',
   styleUrls: ['arena-basic.page.scss']
 })
-export class ArenaBasicPage extends PageComponent implements OnInit, OnDestroy {
+export class ArenaBasicPage extends ArenaBasePage implements OnInit, OnDestroy, AfterViewInit  {
   //#region Queries
 
   @ViewChild('player') playerEl!: ElementRef<HTMLImageElement>;
+  @ViewChild('playerDetail') playerDetailEl!: ElementRef<HTMLImageElement>;
   @ViewChild('opponent') opponentEl!: ElementRef<HTMLImageElement>;
+  @ViewChild('opponentDetail') opponentDetailEl!: ElementRef<HTMLImageElement>;
 
   //#endregion
 
@@ -34,8 +40,23 @@ export class ArenaBasicPage extends PageComponent implements OnInit, OnDestroy {
   //#region Constructor
 
   constructor(
+    pokeApi: PokeApiService
   ) {
-    super();
+    super(pokeApi);
+
+    this.combatEngine.onOpponentExecutesMove = () => {
+      this.animateCSS(this.opponentEl.nativeElement, 'animate__bounce');
+
+      this.playerDetailEl.nativeElement.classList.add('damage');
+      setTimeout(() => this.playerDetailEl.nativeElement.classList.remove('damage'), 500);
+    };
+
+    this.combatEngine.onPlayerExecutesMove = () => {
+      this.animateCSS(this.playerEl.nativeElement, 'animate__bounce');
+
+      this.opponentDetailEl.nativeElement.classList.add('damage');
+      setTimeout(() => this.opponentDetailEl.nativeElement.classList.remove('damage'), 500);
+    };
   }
 
   //#endregion
@@ -50,17 +71,21 @@ export class ArenaBasicPage extends PageComponent implements OnInit, OnDestroy {
     super.ngOnDestroy();
   }
 
-  //#endregion
-
-  //#region PageComponent Methods
-
-  public hasChanges(): boolean {
-    return false;
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
   }
 
   //#endregion
 
-  //#region
+  //#region ArenaBasePage Methods
+
+  protected onCombatEngineLoaded(): void {
+    /* Empty */
+  }
+
+  //#endregion
+
+  //#region Helpers
 
   private animateCSS(node: HTMLElement, animationName: string, callback?: () => void) {
     node.classList.add('animate__animated', animationName);
@@ -81,8 +106,16 @@ export class ArenaBasicPage extends PageComponent implements OnInit, OnDestroy {
 
   //#region Events Handlers
 
-  onAttackClick() {
-    this.animateCSS(this.playerEl.nativeElement, 'animate__bounce');
+  onReload() {
+    super.onReload();
+  }
+
+  onCountdownReady() {
+    super.onCountdownReady();
+  }
+
+  onAttackClick(move: PokemonMove) {
+    super.onAttackClick(move);
   }
 
   //#endregion

@@ -1,3 +1,5 @@
+import { Competitor } from '@app/shared/utils/competitor';
+
 import { UIPicture } from './layout-models/ui-picture';
 import { UIRectangle } from './layout-models/ui-rectangle';
 import { UILabel } from './layout-models/ui-label';
@@ -49,11 +51,12 @@ export class BattlefieldRender {
 
   //#region Methods
 
-  public async init() {
+  public async init(characters: { player: Competitor | null, opponent?: Competitor | null } | null = null) {
     if (!this.ctx) {
       throw new Error('Canvas context undefined');
     }
 
+    this.valid = false;
     this.WIDTH = this.canvas.width;
     this.HEIGHT = this.canvas.height;
 
@@ -67,25 +70,63 @@ export class BattlefieldRender {
 
     this.background = new UIPicture('/assets/images/battlefield.png', 0, 0, 800, 480);
 
-    this.player = new UIPicture('/assets/images/pikachu_back.png', 160, 300, 96, 96);
-    this.playerDetail = new UILabel('Pikachu', 16, 426, 200, 36);
+    if (characters?.player != null) {
+      this.player = new UIPicture(characters.player.pokemon.sprites.back ?? '', 160, 300, 96, 96);
+      this.playerDetail = new UILabel(
+        characters.player.pokemon.name ?? '',
+        `${characters.player.level} / ${characters.player.maxLevel}`,
+        16, 426, 200, 36
+      );
+    }
 
-    this.opponent = new UIPicture('/assets/images/ditto_front.png', 500, 200, 96, 96);
-    this.opponentDetails = new UILabel('DITTO', 540, 160, 200, 36);
+    if (characters?.opponent != null) {
+      this.opponent = new UIPicture(characters.opponent.pokemon.sprites.front ?? '', 500, 200, 96, 96);
+      this.opponentDetails = new UILabel(
+        characters.opponent.pokemon.name ?? '',
+        `${characters.opponent.level} / ${characters.opponent.maxLevel}`,
+        540, 160, 200, 36
+      );
+    }
 
     await this.background.load();
-    await this.player.load();
-    await this.opponent.load();
+
+    if (characters?.player != null) {
+      await this.player.load();
+    }
+
+    if (characters?.opponent != null) {
+      await this.opponent.load();
+    }
 
     window.requestAnimationFrame(() => this.draw());
   }
 
-  public animatePlayer() {
-    this.animate(this.player);
+  public invalidatePlayerLevel(player: Competitor | null) {
+    if (player == null || this.playerDetail == null) {
+      return;
+    }
+
+    this.playerDetail.note = `${player.level} / ${player.maxLevel}`;
+    this.valid = false;
+    this.draw();
   }
 
-  public animateOpponent() {
-    this.animate(this.opponent);
+  public invalidateOpponentLevel(opponent: Competitor | null) {
+    if (opponent == null || this.opponentDetails == null) {
+      return;
+    }
+
+    this.opponentDetails.note = `${opponent.level} / ${opponent.maxLevel}`;
+    this.valid = false;
+    this.draw();
+  }
+
+  public animatePlayer(doneFn?: () => void) {
+    this.animate(this.player, 2, 28, 8, doneFn);
+  }
+
+  public animateOpponent(doneFn?: () => void) {
+    this.animate(this.opponent, 2, 28, 8, doneFn);
   }
 
   //#endregion
@@ -101,10 +142,16 @@ export class BattlefieldRender {
 
     this.bounds.draw(this.ctx);
     await this.background.draw(this.ctx);
-    await this.player.draw(this.ctx);
-    await this.opponent.draw(this.ctx);
-    this.playerDetail.draw(this.ctx);
-    this.opponentDetails.draw(this.ctx);
+
+    if (this.player != null) {
+      await this.player.draw(this.ctx);
+      this.playerDetail.draw(this.ctx);
+    }
+
+    if (this.opponent != null) {
+      await this.opponent.draw(this.ctx);
+      this.opponentDetails.draw(this.ctx);
+    }
 
     // Add stuff you want drawn on top all the time here
     this.valid = true;
@@ -114,7 +161,7 @@ export class BattlefieldRender {
     }
   }
 
-  public animate(character: UIPicture, jumpsCount = 2, jumpHeight = 28, jumpDecrement = 8) {
+  public animate(character: UIPicture, jumpsCount = 2, jumpHeight = 28, jumpDecrement = 8, doneFn?: () => void) {
     let dy = -3; // increment
     const source = character.y;
 
@@ -123,7 +170,11 @@ export class BattlefieldRender {
     const checkAnimation = () => {
       if (character.y === source) {
         if (jumpsCount > 1) {
-          this.animate(character, jumpsCount - 1, jumpHeight - jumpDecrement);
+          this.animate(character, jumpsCount - 1, jumpHeight - jumpDecrement, jumpDecrement, doneFn);
+        }
+
+        if (doneFn != null) {
+          doneFn();
         }
         return;
       }

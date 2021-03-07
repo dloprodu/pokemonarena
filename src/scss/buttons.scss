@@ -1,0 +1,36 @@
+.attacks-box {
+  width: 800px;
+
+  div {
+    border-radius: 0;
+    border: 2px solid #483D8B;
+  }
+
+  .list-group-item-action {
+    border-radius: 0;
+
+    &::after {
+      content: "\f04b";
+      font-family: "FontAwesome";
+      font-weight: 400;
+      position: absolute;
+      top: 33%;
+      right: 5%;
+      bottom: 0;
+      opacity: 0;
+    }
+
+    &:hover {
+      transition: all 0.5s;
+      box-shadow: 0px 6px 15px #0000ff61;
+      padding: 1.2rem 1.5rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+
+      &::after {
+        opacity: 1;
+        transition: all 0.5s;
+      }
+    }
+  }
+}

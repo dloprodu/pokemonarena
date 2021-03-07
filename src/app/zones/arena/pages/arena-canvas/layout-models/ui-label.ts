@@ -6,6 +6,7 @@ export class UILabel extends UIRectangle {
 
   constructor(
     public text: string,
+    public note: string,
     x: number,
     y: number,
     w: number,
@@ -72,6 +73,6 @@ export class UILabel extends UIRectangle {
     ctx.fillText(caption?.toUpperCase(), this.x + 6, this.y + (this.h / 2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
 
     ctx.textAlign = 'end';
-    ctx.fillText('100 / 100', this.x + this.w - 6, this.y + (this.h / 2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
+    ctx.fillText(this.note, this.x + this.w - 6, this.y + (this.h / 2) + ((this.toolbox?.strokeWidth ?? 0) / 2));
   }
 }

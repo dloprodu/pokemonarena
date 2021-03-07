@@ -7,6 +7,12 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ArenaRoutingModule } from './arena.routing.module';
 
 import * as pages from './pages';
+import * as components from './components';
+
+const componentsList = [
+  components.CountdownComponent,
+  components.GameResultPanelComponent,
+];
 
 const pagesList = [
   pages.ArenaBasicPage,
@@ -26,7 +32,8 @@ const pagesList = [
     ArenaRoutingModule,
   ],
   declarations: [
-    ...pagesList
+    ...pagesList,
+    ...componentsList,
   ],
 })
 export class ArenaModule {

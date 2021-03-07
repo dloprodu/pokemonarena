@@ -1,0 +1,6 @@
+<div class="game-result-panel"
+  [class.win]="player?.level > 0"
+  [class.lose]="player?.level === 0">
+  <span *ngIf="player?.level > 0">{{ 'you_win' | translate }}</span>
+  <span *ngIf="player?.level === 0">{{ 'you_lose' | translate }}</span>
+</div>

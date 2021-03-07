@@ -5,5 +5,12 @@
   "choose-render": "Elige el tipo de render",
   "dark": "Oscuro",
   "light": "Claro",
-  "play": "Jugar"
+  "play": "Jugar",
+  "please_wait": "Por favor, espere ...",
+  "not_valid_combat": "El jugador o el oponente no tienen ataques de daño.",
+  "reload": "Recargar",
+  "player_has_turn": "Tu turno",
+  "opponent_has_turn": "Turno del oponente",
+  "you_win": "Tu ganas !",
+  "you_lose": "Tu pierdes !"
 }

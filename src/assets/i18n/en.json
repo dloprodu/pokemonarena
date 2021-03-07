@@ -5,5 +5,12 @@
   "choose-render": "Choose the render type",
   "dark": "Dark",
   "light": "Light",
-  "play": "Play"
+  "play": "Play",
+  "please_wait": "Please wait ...",
+  "not_valid_combat": "The player, or the opponent, doesn't have damage moves.",
+  "reload": "Reload",
+  "player_has_turn": "Your turn",
+  "opponent_has_turn": "Opponent turn",
+  "you_win": "You win !",
+  "you_lose": "You lose !"
 }

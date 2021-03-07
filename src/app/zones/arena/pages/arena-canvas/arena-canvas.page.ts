@@ -1,14 +1,16 @@
 import {
   Component,
+  ViewChild,
+  ElementRef,
   OnInit,
   OnDestroy,
-  ViewChild,
-  AfterViewInit,
-  ElementRef
+  AfterViewInit
 } from '@angular/core';
 
-import { PageComponent, PokeApiService } from '@app/shared';
+import { PokeApiService } from '@app/shared';
+import { PokemonMove } from '@app/shared/models';
 
+import { ArenaBasePage } from '../arena-base-page';
 import { BattlefieldRender } from './battlefield-render';
 
 @Component({
@@ -16,7 +18,7 @@ import { BattlefieldRender } from './battlefield-render';
   templateUrl: 'arena-canvas.page.html',
   styleUrls: ['arena-canvas.page.scss']
 })
-export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy, AfterViewInit  {
   //#region Queries
 
   @ViewChild('canvas', { static: true })
@@ -43,9 +45,17 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   //#region Constructor
 
   constructor(
-    private pokeApi: PokeApiService
+    pokeApi: PokeApiService
   ) {
-    super();
+    super(pokeApi);
+
+    this.combatEngine.onOpponentExecutesMove = () => {
+      this.render?.animateOpponent(() => this.render?.invalidatePlayerLevel(this.combatEngine.player));
+    };
+
+    this.combatEngine.onPlayerExecutesMove = () => {
+      this.render?.animatePlayer(() => this.render?.invalidateOpponentLevel(this.combatEngine.opponent));
+    };
   }
 
   //#endregion
@@ -54,30 +64,6 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
 
   ngOnInit() {
     super.ngOnInit();
-
-    this.pokeApi
-      .getPokemonList(1000)
-      .subscribe(result => {
-        console.log(result);
-      }, err => {
-        console.error(err);
-      });
-
-    this.pokeApi
-      .getPokemonMovesList(['mega-punch', 'pay-day', 'thunder-punch'])
-      .subscribe(result => {
-        console.log(result);
-      }, err => {
-        console.error(err);
-      });
-
-    this.pokeApi
-      .getPokemonTypeInfoList()
-      .subscribe(result => {
-        console.log(result);
-      }, err => {
-        console.error(err);
-      });
   }
 
   ngOnDestroy() {
@@ -85,8 +71,8 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
   }
 
   ngAfterViewInit() {
-    // this.canvas.nativeElement.width = 800;
-    // this.canvas.nativeElement.height = 480;
+    super.ngAfterViewInit();
+
     this.render = new BattlefieldRender(this.canvas.nativeElement);
     this.render.init();
   }
@@ -101,10 +87,26 @@ export class ArenaCanvasPage extends PageComponent implements OnInit, OnDestroy,
 
   //#endregion
 
+  //#region ArenaBasePage Methods
+
+  protected onCombatEngineLoaded(): void {
+    this.render?.init({ player: this.combatEngine.player, opponent: this.combatEngine.opponent });
+  }
+
+  //#endregion
+
   //#region Events Handlers
 
-  onAttackClick() {
-    this.render?.animatePlayer();
+  onReload() {
+    super.onReload();
+  }
+
+  onCountdownReady() {
+    super.onCountdownReady();
+  }
+
+  onAttackClick(move: PokemonMove) {
+    super.onAttackClick(move);
   }
 
   //#endregion

@@ -1,0 +1,55 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.countdown {
+  display: inline;
+
+  &:before {
+    content: '4321 ';
+    
+    font-family: monospace;
+    font-size: 180px;
+    display: inline-block;
+    width: 1ch;
+    overflow: hidden;
+    color: white;
+    
+    -webkit-animation: countdowns 5s steps(5) 1;
+    -moz-animation: countdowns 5s steps(5) 1;
+    -ms-animation: countdowns 5s steps(5) 1;
+    -o-animation: countdowns 5s steps(5) 1;
+    animation: countdowns 5s steps(5) 1;
+  }
+}
+
+
+@-webkit-keyframes countdowns {
+  0% { text-indent: 0; }
+  100% { text-indent: -5ch; }
+}
+@-moz-keyframes countdowns {
+  0% { text-indent: 0; }
+  100% { text-indent: -5ch; }
+}
+@-ms-keyframes countdowns {
+  0% { text-indent: 0; }
+  100% { text-indent: -5ch; }
+}
+@-o-keyframes countdowns {
+  0% { text-indent: 0; }
+  100% { text-indent: -5ch; }
+}
+@keyframes countdowns {
+  0% { text-indent: 0; }
+  100% { text-indent: -5ch; }
+}
