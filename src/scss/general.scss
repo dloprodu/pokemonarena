@@ -27,3 +27,7 @@ body {
     color: #F5F5F5;
   }
 }
+
+input.ng-dirty.ng-invalid {
+  border-color:orangered;
+}

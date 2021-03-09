@@ -6,12 +6,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ContextService, StorageService, PokeApiService, ThemeManagerService } from './services';
+import { ContextService, StorageService, PokeApiService, ThemeManagerService, RankingManagerService } from './services';
 
 const servicesList = [
   ContextService,
   StorageService,
   PokeApiService,
+  RankingManagerService,
   ThemeManagerService
 ];
 

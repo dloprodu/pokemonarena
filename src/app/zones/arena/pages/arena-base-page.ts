@@ -5,7 +5,7 @@ import {
   AfterViewInit
 } from '@angular/core';
 
-import { PageComponent, PokeApiService } from '@app/shared';
+import { PageComponent, PokeApiService, RankingManagerService } from '@app/shared';
 import { PokemonMove } from '@app/shared/models';
 
 import { CombatEngine } from '@app/shared/utils/combat-engine';
@@ -20,13 +20,15 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
 
   public readonly combatEngine = new CombatEngine();
   public showCountdown = true;
+  public abstract get userId(): string;
 
   //#endregion
 
   //#region Constructor
 
   constructor(
-    protected pokeApi: PokeApiService
+    protected pokeApi: PokeApiService,
+    protected rankingManager: RankingManagerService
   ) {
     super();
   }
@@ -64,6 +66,18 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   protected load() {
     this.showCountdown = true;
     this.combatEngine.reset();
+    this.combatEngine.onFinished = () => {
+      // Save score
+      if (this.userId) {
+        this.rankingManager.recordScore(
+          this.userId,
+          this.combatEngine.score,
+          this.combatEngine.player.pokemon.name
+        ).subscribe(res => {
+          console.log(res);
+        });
+      }
+    };
 
     this.pokeApi
       .getPokemonList(1000)

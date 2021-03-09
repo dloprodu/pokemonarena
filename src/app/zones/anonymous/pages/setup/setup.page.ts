@@ -6,8 +6,11 @@ import {
 import { Router } from '@angular/router';
 
 import { PageComponent } from '@app/shared';
-import { PokeApiService, ContextService, ThemeManagerService } from '@app/shared/services';
-import { Language} from '@app/shared/models/language';
+import { PokeApiService, ContextService, ThemeManagerService, RankingManagerService } from '@app/shared/services';
+import { Language, User } from '@app/shared/models';
+
+import { of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -53,6 +56,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   language = this.context.instance.language;
   theme = this.themeManager.getTheme();
   render = 'html';
+  alias = '';
 
   //#endregion
 
@@ -62,6 +66,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     private context: ContextService,
     private pokeApi: PokeApiService,
     private themeManager: ThemeManagerService,
+    private rankingManager: RankingManagerService,
     private router: Router
   ) {
     super();
@@ -97,6 +102,26 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   //#endregion
 
+  //#region Helpers
+
+  private navigateToGamePage(user: User | null) {
+    switch (this.render) {
+      case 'html':
+        this.router.navigate([`/${this.context.instance.language}/arena/arena-html`], {
+          queryParams: { userId: user?.id }
+        });
+        break;
+
+      case 'canvas':
+        this.router.navigate([`/${this.context.instance.language}/arena/arena-canvas`], {
+          queryParams: { userId: user?.id }
+        });
+        break;
+    }
+  }
+
+  //#endregion
+
   //#region Events Handlers
 
   onThemeChange(event: Event) {
@@ -112,15 +137,22 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   }
 
   onPlayClick() {
-    switch (this.render) {
-      case 'html':
-        this.router.navigate([`/${this.context.instance.language}/arena/arena-html`]);
-        break;
+    this.rankingManager
+      .getUser(this.alias)
+      .pipe(
+        mergeMap(user => {
+          if (user == null) {
+            return this.rankingManager.createUser(this.alias);
+          }
 
-      case 'canvas':
-        this.router.navigate([`/${this.context.instance.language}/arena/arena-canvas`]);
-        break;
-    }
+          return of(user);
+        })
+      ).subscribe(user => {
+        this.navigateToGamePage(user);
+      }, err => {
+        // If something was wrong, we simply navigate to the game without alias
+        this.navigateToGamePage(null);
+      })
   }
 
   //#endregion

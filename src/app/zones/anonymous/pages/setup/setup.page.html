@@ -25,6 +25,16 @@
         </ng-template>
       </select>
     </div>
-    <button type="submit" class="btn btn-secondary btn-lg" (click)="onPlayClick()">{{ 'play' | translate }}</button>
+    <div class="form-group">
+      <label for="user-alias">{{ 'user-alias' | translate }}</label>
+      <input #username="ngModel" class="form-control" id="user-alias" name="alias"
+        [(ngModel)]="alias"
+        required
+        pattern="[^' '\W]+"
+        minlength="3"
+        maxlength="20">
+      <small class="text-danger" *ngIf="username.invalid">{{ 'user-alias-not-valid' | translate }}</small>
+    </div>
+    <button type="submit" [disabled]="username.invalid" class="btn btn-secondary btn-lg" (click)="onPlayClick()">{{ 'play' | translate }}</button>
   </form>
 </div>

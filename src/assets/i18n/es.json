@@ -12,5 +12,7 @@
   "player_has_turn": "Tu turno",
   "opponent_has_turn": "Turno del oponente",
   "you_win": "Tu ganas !",
-  "you_lose": "Tu pierdes !"
+  "you_lose": "Tu pierdes !",
+  "user-alias": "Alias de usuario",
+  "user-alias-not-valid": "El alias de usuario debe ser de al menos 3 caracteres alfanuméricos sin espacios."
 }

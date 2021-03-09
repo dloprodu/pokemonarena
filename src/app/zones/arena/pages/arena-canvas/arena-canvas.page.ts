@@ -7,7 +7,9 @@ import {
   AfterViewInit
 } from '@angular/core';
 
-import { PokeApiService } from '@app/shared';
+import { ActivatedRoute } from '@angular/router';
+
+import { PokeApiService, RankingManagerService } from '@app/shared';
 import { PokemonMove } from '@app/shared/models';
 
 import { ArenaBasePage } from '../arena-base-page';
@@ -34,10 +36,15 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
     return 'Arena Canvas';
   }
 
+  get userId(): string {
+    return this._userId;
+  }
+
   //#endregion
 
   //#region Fields
 
+  private _userId;
   private render?: BattlefieldRender;
 
   //#endregion
@@ -45,9 +52,11 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
   //#region Constructor
 
   constructor(
-    pokeApi: PokeApiService
+    pokeApi: PokeApiService,
+    rankingManager: RankingManagerService,
+    private route: ActivatedRoute
   ) {
-    super(pokeApi);
+    super(pokeApi, rankingManager);
 
     this.combatEngine.onOpponentExecutesMove = () => {
       this.render?.animateOpponent(() => this.render?.invalidatePlayerLevel(this.combatEngine.player));
@@ -64,6 +73,8 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
 
   ngOnInit() {
     super.ngOnInit();
+
+    this._userId = this.route.snapshot.queryParams.userId;
   }
 
   ngOnDestroy() {

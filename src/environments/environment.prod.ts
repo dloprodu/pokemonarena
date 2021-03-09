@@ -24,6 +24,12 @@ export const environment = {
           'Content-Type': 'application/json'
         },
       },
+      gameAPI: {
+        baseUrl: 'http://localhost:3000',
+        defaultHeaders: {
+          'Content-Type': 'application/json'
+        },
+      },
       translations: {
         baseUrl: '/assets/i18n',
       }

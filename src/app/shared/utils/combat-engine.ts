@@ -47,6 +47,10 @@ export class CombatEngine {
     return this._state === 'finished';
   }
 
+  get score(): number {
+    return this._score;
+  }
+
   //#endregion
 
   //#region Fields
@@ -57,6 +61,7 @@ export class CombatEngine {
   private _opponent: Competitor | null = null;
   private _typeInfoList!: PokemonTypeInfo[];
   private _state: GameStateType = 'none';
+  private _score = 0;
 
   /**
    * Callback that will be called when the opponent executes a movement.
@@ -112,6 +117,7 @@ export class CombatEngine {
     this._typeInfoList = typeInfoList;
     this._turnOwner = Math.random() > 0.5 ? 'opponent' : 'player';
     this._state = 'initiated';
+    this._score = 0;
 
     if (this.mode === '1vsCOM') {
       setTimeout(() => this.executeOpponentMove(), 500);
@@ -122,6 +128,7 @@ export class CombatEngine {
     this._player = null;
     this._opponent = null;
     this._state = 'none';
+    this._score = 0;
   }
 
   /**
@@ -132,7 +139,9 @@ export class CombatEngine {
       return;
     }
 
-    this.opponent.level = Math.max(0, this.opponent.level - this.calculateDamage(this.player, this.opponent, move));
+    const damage = this.calculateDamage(this.player, this.opponent, move);
+    this.opponent.level = Math.max(0, this.opponent.level - damage);
+    this._score += damage;
 
     // Notify that the player has executed the moved. That is util, for example, if the UI component wants to apply
     // some animation.
@@ -146,6 +155,7 @@ export class CombatEngine {
 
     // Check if the combat has finished
     if (this.opponent.level === 0) {
+      this._score += 1000;
       this.finish();
       return;
     }
@@ -168,7 +178,8 @@ export class CombatEngine {
       return;
     }
 
-    this.player.level = Math.max(0, this.player.level - this.calculateDamage(this.opponent, this.player, move));
+    const damage = this.calculateDamage(this.opponent, this.player, move);
+    this.player.level = Math.max(0, this.player.level - damage);
 
     // Notify that the opponent has executed the moved. That is util, for example, if the UI component wants to apply
     // some animation.
@@ -256,7 +267,14 @@ export class CombatEngine {
    * Selects 4 moves randomly.
    */
   private selectMoves(moves: PokemonMove[], count = 4): PokemonMove[] {
-    const damageMoves = moves.filter(m => m.category === MoveCategory.Damage);
+    const damageMoves = moves.filter(m => [
+        MoveCategory.Damage,
+        MoveCategory.DamageAndAilment,
+        MoveCategory.DamageAndHeal,
+        MoveCategory.DamageAndLower,
+        MoveCategory.DamageAndRaise
+      ].indexOf(m.category) > -1
+    );
     const result: PokemonMove[] = [];
 
     for (let i = 0; i < Math.min(count, damageMoves.length); i++) {

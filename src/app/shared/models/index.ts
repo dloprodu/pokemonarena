@@ -6,4 +6,6 @@ export * from './pokemon-move';
 export * from './pokemon-type-info';
 export * from './pokemon-type';
 export * from './pokemon';
+export * from './ranking-item';
 export * from './type-relations';
+export * from './user';
