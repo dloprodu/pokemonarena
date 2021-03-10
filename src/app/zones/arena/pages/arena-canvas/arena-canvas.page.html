@@ -1,35 +1,23 @@
 <h1>Arena Canvas Page</h1>
 
-<div class="shadow d-inline-block">
-  <div class="battlefield shadow-sm text-body">
-    <countdown *ngIf="showCountdown" (ready)="onCountdownReady()"></countdown>
-    <game-result-panel [player]="combatEngine.player" *ngIf="combatEngine.finished"></game-result-panel>
-    <div class="battlefield-caption" [class.d-none]="!combatEngine.initiated">
-      <span *ngIf="combatEngine.playerHasTurn">{{ 'player_has_turn' | translate }}</span>
-      <span *ngIf="!combatEngine.playerHasTurn">{{ 'opponent_has_turn' | translate }}</span>
-    </div>
-    <canvas #canvas width="800" height="480"></canvas>
-  </div>
-  <div class="attacks-box text-body" *ngIf="!combatEngine.finished">
-    <div class="list-group" *ngIf="combatEngine.player?.moves; else pleaseWait">
-      <ng-template [ngIf]="(combatEngine.player?.moves?.length || 0) > 0 && (combatEngine.opponent?.moves?.length || 0) > 0" [ngIfElse]="notValidCombat">
-        <ng-template ngFor let-move [ngForOf]="combatEngine.player?.moves" >
-          <button type="button" [disabled]="!combatEngine.playerHasTurn || combatEngine.finished" class="list-group-item list-group-item-action list-group-item-dark" (click)="onAttackClick(move)">{{ move.localizedName }}</button>
-        </ng-template>
-      </ng-template>
-      <ng-template #notValidCombat>
-        <div class="alert alert-warning m-0">
-          {{ 'not_valid_combat' | translate }} <button type="button" class="btn btn-sm btn-warning" (click)="onReload()">{{ 'reload' | translate }} </button>
-        </div>
-      </ng-template>
-    </div>
-    <ng-template #pleaseWait>
-      <div class="alert alert-light m-0">
-        {{ 'please_wait' | translate }}
+<div class="d-flex w-100">
+  <div class="poition-relative">
+    <div class="battlefield shadow-sm text-body">
+      <countdown *ngIf="showCountdown" (ready)="onCountdownReady()"></countdown>
+      <game-result-panel [player]="combatEngine.player" *ngIf="combatEngine.finished"></game-result-panel>
+      <div class="battlefield-caption" [class.d-none]="!combatEngine.initiated">
+        <span *ngIf="combatEngine.playerHasTurn">{{ 'player_has_turn' | translate }}</span>
+        <span *ngIf="!combatEngine.playerHasTurn">{{ 'opponent_has_turn' | translate }}</span>
       </div>
-    </ng-template>
+      <canvas #canvas width="800" height="480"></canvas>
+    </div>
+    <move-picker
+      [combatEngine]="combatEngine"
+      (reloadClick)="onReload()"
+      (attackClick)="onAttackClick($event)">
+    </move-picker>
   </div>
-  <div class="attacks-box text-body" *ngIf="combatEngine.finished">
-    <button type="button" class="btn btn-lg btn-block btn-warning rounded-0" (click)="onReload()">{{ 'reload' | translate }} </button>
+  <div class="flex-grow-1">
+    <ranking-table [userId]="userId" [style.height.px]="680"></ranking-table>
   </div>
 </div>

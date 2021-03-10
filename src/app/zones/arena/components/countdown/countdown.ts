@@ -14,7 +14,7 @@ import {
 import { BaseComponent } from '@app/shared';
 
 /**
- * Cart preview overlay item.
+ * Countdown component.
  */
 @Component({
   selector: 'countdown',

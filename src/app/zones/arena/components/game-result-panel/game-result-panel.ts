@@ -13,7 +13,7 @@ import { BaseComponent } from '@app/shared';
 import { Competitor } from '@app/shared/utils/competitor';
 
 /**
- * Cart preview overlay item.
+ * Game result panel.
  */
 @Component({
   selector: 'game-result-panel',

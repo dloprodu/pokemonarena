@@ -80,7 +80,7 @@ export class RankingManagerService {
    */
   createUser(alias: string): Observable<User> {
     const url = `${this.gameApi.baseUrl}/users/create`;
-    
+
     return this.http
       .post<GameBaseDataResponse<GetUserResponse>>(
         url,
@@ -106,15 +106,32 @@ export class RankingManagerService {
 
   /**
    * Returns the ranking.
+   * @param filter
+   *  - userId
+   *  - date: 'today' | 'week' | 'month'
+   *  - sort: '+score' | '-score' | ...
    */
   getRanking(
-    filter?: { userId?: string },
+    filter?: { userId?: string; date?: string, sort?: string},
+    page = 0,
+    perPage = 20
   ): Observable<RankingItem[]> {
     const searchParams = new URLSearchParams();
 
     if (filter.userId) {
-      searchParams.append('scoredBy', filter.userId)
+      searchParams.append('scoredBy', filter.userId);
     }
+
+    if (filter.date) {
+      searchParams.append('date', filter.date);
+    }
+
+    if (filter.sort) {
+      searchParams.append('sort', filter.sort);
+    }
+
+    searchParams.append('page', `${page ?? 0}`);
+    searchParams.append('per_page', `${perPage ?? 20}`);
 
     return this.http
       .get<GameBasePaginatedResponse<GetRankingResponse[]>>(
@@ -124,16 +141,21 @@ export class RankingManagerService {
           observe: 'response'
         }
       ).pipe(
-        map((result) => {
-          return result.body?.data?.map(r => (<RankingItem>{
+        map((result): RankingItem[] => {
+          return result.body?.data?.map(r => ({
             id: r._id,
             score: r.score,
             scoredBy: {
               id: r.scoredBy._id,
               alias: r.scoredBy.alias
             },
-            pokemon: r.pokemon
+            pokemon: r.pokemon,
+            date: r.date
           })) ?? [];
+        }),
+        catchError(err => {
+          console.error(err);
+          return of([]);
         })
       );
   }
@@ -143,33 +165,34 @@ export class RankingManagerService {
    */
   recordScore(userId: string, score: number, pokemon: string) {
     const url = `${this.gameApi.baseUrl}/ranking/add`;
-    
+
     return this.http
       .post<GameBaseDataResponse<GetRankingResponse>>(
         url,
-        { 
+        {
           scoredBy: userId,
-          score: score,
-          pokemon: pokemon
+          score,
+          pokemon
         },
         {
           headers: new HttpHeaders(this.gameApi.defaultHeaders),
           observe: 'response'
         }
       ).pipe(
-        map(result => {
+        map((result): RankingItem => {
           if (result.body?.data == null) {
             return null;
           }
 
-          return <RankingItem>{
+          return {
             id: result.body.data._id,
             score: result.body.data.score,
             scoredBy: {
               id: result.body.data.scoredBy._id,
               alias: result.body.data.scoredBy.alias
             },
-            pokemon: result.body.data.pokemon
+            pokemon: result.body.data.pokemon,
+            date: result.body.data.date
           };
         }),
         catchError(_ => of(null))

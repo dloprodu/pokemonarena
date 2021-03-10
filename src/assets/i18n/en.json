@@ -14,5 +14,10 @@
   "you_win": "You win !",
   "you_lose": "You lose !",
   "user-alias": "User alias",
-  "user-alias-not-valid": "The alias should at least have 3 alphanumeric characters without spaces."
+  "user-alias-not-valid": "The alias should at least have 3 alphanumeric characters without spaces.",
+  "general-ranking": "Ranking General",
+  "user-ranking": "Tus puntuaciones",
+  "user": "Usuario",
+  "date": "Fecha",
+  "score": "Puntuación"
 }

@@ -12,6 +12,8 @@ import * as components from './components';
 const componentsList = [
   components.CountdownComponent,
   components.GameResultPanelComponent,
+  components.MovePickerComponent,
+  components.RankingTableComponent,
 ];
 
 const pagesList = [

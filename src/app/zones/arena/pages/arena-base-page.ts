@@ -2,7 +2,8 @@ import {
   Directive,
   OnInit,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 
 import { PageComponent, PokeApiService, RankingManagerService } from '@app/shared';
@@ -10,11 +11,19 @@ import { PokemonMove } from '@app/shared/models';
 
 import { CombatEngine } from '@app/shared/utils/combat-engine';
 
+import { RankingTableComponent } from '../components/ranking-table/ranking-table';
+
 import { combineLatest, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 @Directive()
 export abstract class ArenaBasePage extends PageComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  //#region Queries
+
+  @ViewChild(RankingTableComponent) rankingTable?: RankingTableComponent;
+
+  //#endregion
 
   //#region Fields
 
@@ -74,7 +83,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
           this.combatEngine.score,
           this.combatEngine.player.pokemon.name
         ).subscribe(res => {
-          console.log(res);
+          this.rankingTable?.refresh();
         });
       }
     };

@@ -1,0 +1,62 @@
+<div class="d-flex flex-column h-100">
+  <div class="btn-group btn-block" role="group">
+    <button class="btn btn-primary rounded-0" [class.active]="general" (click)="onToggleRanking()">{{ 'general-ranking' | translate }}</button>
+    <button class="btn btn-primary rounded-0" [class.active]="!general" (click)="onToggleRanking()">{{ 'user-ranking' | translate }}</button>
+  </div>
+  <div class="flex-grow-1 overflow-auto" *ngIf="general">
+    <table class="table table-striped table-dark table-bordered table-sm m-0">
+      <thead>
+        <tr>
+          <th colspan="4">{{ 'general-ranking' | translate }}</th>
+        </tr>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ 'user' | translate }}</th>
+          <th scope="col">Pokemon</th>
+          <th scope="col">{{ 'score' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="generalRanking" let-i="index" >
+          <tr>
+            <th scope="row">{{ i }}</th>
+            <td>{{ item.scoredBy.alias }}</td>
+            <td><span class="text-truncate">{{ item.pokemon }}</span></td>
+            <td>{{ item.score }}</td>
+          </tr>
+        </ng-template>
+        <ng-template ngFor let-item [ngForOf]="generalRanking" let-i="index" >
+          <tr>
+            <th scope="row">{{ i }}</th>
+            <td>{{ item.scoredBy.alias }}</td>
+            <td><span class="text-truncate">{{ item.pokemon }}</span></td>
+            <td>{{ item.score }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+  <div class="flex-grow-1 overflow-auto" *ngIf="!general">
+    <table class="table table-striped table-dark table-bordered table-sm m-0">
+      <thead>
+        <tr>
+          <th colspan="4">{{ 'user-ranking' | translate }}</th>
+        </tr>
+        <tr>
+          <th scope="col">{{ 'date' | translate }}</th>
+          <th scope="col">Pokemon</th>
+          <th scope="col">{{ 'score' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="userRanking">
+          <tr>
+            <td>{{ item.date | date: 'dd:MM:YY' }}</td>
+            <td><span class="text-truncate">{{ item.pokemon }}</span></td>
+            <td>{{ item.score }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>  
+</div>

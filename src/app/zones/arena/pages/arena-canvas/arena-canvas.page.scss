@@ -30,6 +30,10 @@
   }
 }
 
-.attacks-box {
-  width: 804px;
+:host ::ng-deep {
+  move-picker {
+    .attacks-box {
+      width: 804px;
+    }
+  }
 }
