@@ -19,5 +19,6 @@
   "user-ranking": "Tus puntuaciones",
   "user": "Usuario",
   "date": "Fecha",
-  "score": "Puntuación"
+  "score": "Puntuación",
+  "loading": "Loading ..."
 }

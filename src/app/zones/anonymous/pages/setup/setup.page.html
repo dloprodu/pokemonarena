@@ -35,6 +35,14 @@
         maxlength="20">
       <small class="text-danger" *ngIf="username.invalid">{{ 'user-alias-not-valid' | translate }}</small>
     </div>
-    <button type="submit" [disabled]="username.invalid" class="btn btn-secondary btn-lg" (click)="onPlayClick()">{{ 'play' | translate }}</button>
+    <button type="submit" [disabled]="username.invalid || loading" class="btn btn-secondary btn-lg" (click)="onPlayClick()">
+      <span *ngIf="loading">
+        <span class="spinner-border spinner-border-sm p-1" role="status">
+          <span class="sr-only"></span>
+        </span>
+        <strong>{{ 'loading' | translate }}</strong>
+      </span>
+      <span *ngIf="!loading">{{ 'play' | translate }}</span>
+    </button>
   </form>
 </div>

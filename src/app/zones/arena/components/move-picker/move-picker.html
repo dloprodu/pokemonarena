@@ -18,7 +18,10 @@
   </div>
   <ng-template #pleaseWait>
     <div class="alert alert-light m-0">
-      {{ 'please_wait' | translate }}
+      <span class="spinner-border spinner-border-sm p-1" role="status">
+        <span class="sr-only"></span>
+      </span>
+      <strong class="ml-1">{{ 'please_wait' | translate }}</strong>
     </div>
   </ng-template>
 </div>

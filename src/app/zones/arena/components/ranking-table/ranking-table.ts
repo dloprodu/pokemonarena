@@ -80,7 +80,7 @@ export class RankingTableComponent extends BaseComponent implements OnChanges, O
 
   private loadRanking() {
     this.rankingManager
-      .getRanking({ date: 'month', sort: '-score'})
+      .getRanking({ date: 'month', sort: '-score'}, 0, 100)
       .subscribe(result => {
         this.generalRanking = result;
       });

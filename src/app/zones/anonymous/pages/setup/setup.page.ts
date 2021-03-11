@@ -10,7 +10,7 @@ import { PokeApiService, ContextService, ThemeManagerService, RankingManagerServ
 import { Language, User } from '@app/shared/models';
 
 import { of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -57,6 +57,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   theme = this.themeManager.getTheme();
   render = 'html';
   alias = '';
+  loading = false;
 
   //#endregion
 
@@ -137,6 +138,8 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   }
 
   onPlayClick() {
+    this.loading = true;
+
     this.rankingManager
       .getUser(this.alias)
       .pipe(
@@ -146,7 +149,8 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
           }
 
           return of(user);
-        })
+        }),
+        // finalize(() => this.loading = false)
       ).subscribe(user => {
         this.navigateToGamePage(user);
       }, err => {

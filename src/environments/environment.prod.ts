@@ -25,7 +25,7 @@ export const environment = {
         },
       },
       gameAPI: {
-        baseUrl: 'https://pokearenaapi.azurewebsites.net',
+        baseUrl: 'https://pokearenaapi.azurewebsites.net/api/v1',
         defaultHeaders: {
           'Content-Type': 'application/json'
         },
