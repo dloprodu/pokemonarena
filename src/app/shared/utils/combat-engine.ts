@@ -63,6 +63,11 @@ export class CombatEngine {
   private _state: GameStateType = 'none';
   private _score = 0;
 
+  private _timers = {
+    turnTimer: null,
+    opponent1vsCOMTimer: null
+  };
+
   /**
    * Callback that will be called when the opponent executes a movement.
    */
@@ -129,6 +134,8 @@ export class CombatEngine {
     this._opponent = null;
     this._state = 'none';
     this._score = 0;
+    clearTimeout(this._timers.turnTimer);
+    clearTimeout(this._timers.opponent1vsCOMTimer);
   }
 
   /**
@@ -161,11 +168,11 @@ export class CombatEngine {
     }
 
     // Update the turn
-    setTimeout(() => {
+    this._timers.turnTimer = setTimeout(() => {
       this._turnOwner = 'opponent';
 
       if (this.mode === '1vsCOM') {
-        setTimeout(() => this.executeOpponentMove(), 1000);
+        this._timers.opponent1vsCOMTimer = setTimeout(() => this.executeOpponentMove(), 1000);
       }
     }, 500);
   }
@@ -198,7 +205,7 @@ export class CombatEngine {
     }
 
     // Update the turn
-    setTimeout(() => this._turnOwner = 'player', 500);
+    this._timers.turnTimer = setTimeout(() => this._turnOwner = 'player', 500);
   }
 
   //#endregion

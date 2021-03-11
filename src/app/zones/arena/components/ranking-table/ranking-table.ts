@@ -76,6 +76,12 @@ export class RankingTableComponent extends BaseComponent implements OnChanges, O
 
   //#endregion
 
+  //#region Methods
+
+  trackByFn = (index: number, item: RankingItem) => item.id;
+
+  //#endregion
+
   //#region Helpers
 
   private loadRanking() {
@@ -92,8 +98,9 @@ export class RankingTableComponent extends BaseComponent implements OnChanges, O
     }
 
     this.rankingManager
-      .getRanking({ userId: this.userId, date: 'month', sort: '-date' })
+      .getRanking({ userId: this.userId, sort: '-date' }, 0, 100)
       .subscribe(result => {
+        console.log('----> %O', result);
         this.userRanking = result;
       });
   }

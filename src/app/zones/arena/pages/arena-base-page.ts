@@ -54,6 +54,8 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
 
   ngOnDestroy() {
     super.ngOnDestroy();
+
+    this.combatEngine?.reset();
   }
 
   ngAfterViewInit() {
@@ -83,6 +85,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
           this.combatEngine.score,
           this.combatEngine.player.pokemon.name
         ).subscribe(res => {
+          console.log('<< FINISHED >>');
           this.rankingTable?.refresh();
         });
       }

@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-template ngFor let-item [ngForOf]="generalRanking" let-i="index" >
+        <ng-template ngFor let-item [ngForOf]="generalRanking" let-i="index" [ngForTrackBy]="trackByFn">
           <tr>
             <th scope="row">{{ i + 1 }}</th>
             <td>{{ item.scoredBy.alias }}</td>
@@ -49,7 +49,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-template ngFor let-item [ngForOf]="userRanking">
+        <ng-template ngFor let-item [ngForOf]="userRanking" [ngForTrackBy]="trackByFn">
           <tr>
             <td>{{ item.date | date: 'dd:MM:YY' }}</td>
             <td><span class="text-truncate">{{ item.pokemon }}</span></td>

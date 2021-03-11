@@ -163,7 +163,7 @@ export class RankingManagerService {
   /**
    * Records the score.
    */
-  recordScore(userId: string, score: number, pokemon: string) {
+  recordScore(userId: string, score: number, pokemon: string): Observable<RankingItem> {
     const url = `${this.gameApi.baseUrl}/ranking/add`;
 
     return this.http
