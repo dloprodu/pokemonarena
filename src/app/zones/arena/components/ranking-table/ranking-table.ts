@@ -100,7 +100,6 @@ export class RankingTableComponent extends BaseComponent implements OnChanges, O
     this.rankingManager
       .getRanking({ userId: this.userId, sort: '-date' }, 0, 100)
       .subscribe(result => {
-        console.log('----> %O', result);
         this.userRanking = result;
       });
   }
