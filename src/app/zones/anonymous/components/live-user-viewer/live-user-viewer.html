@@ -1,0 +1,28 @@
+<ng-template [ngIf]="liveUsers.length > 0" [ngIfElse]="notLiveUsers">
+  <table class="table table-hover table-striped table-dark table-sm">
+    <thead>
+      <tr>
+        <th colspan="4">{{ liveUsers.length }} on live ...</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-user [ngForOf]="liveUsers" let-i="index">
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ user.loggedAt | date:'hh:mm' }}</td>
+          <td>{{ user.alias }}</td>
+          <td class="text-right">
+            <button [disabled]="!live.logged" [class.d-none]="user.alias === live.alias" class="btn btn-sm btn-info">
+              {{ 'play-request' | translate}}
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+</ng-template>
+<ng-template #notLiveUsers>
+  <div class="alert alert-primary m-0">
+    {{ 'not_live_users' | translate }}
+  </div>
+</ng-template>

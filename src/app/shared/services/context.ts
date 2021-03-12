@@ -5,7 +5,7 @@ import { Context } from '../models/context';
 import { StorageService } from './storage';
 
 /**
- * @file context.service.js
+ * @file context.js
  * @summary Context service.
  * @description
  *

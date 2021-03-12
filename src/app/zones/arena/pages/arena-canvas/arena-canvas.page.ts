@@ -59,10 +59,18 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
     super(pokeApi, rankingManager);
 
     this.combatEngine.onOpponentExecutesMove = () => {
+      if (!this.alive) {
+        return;
+      }
+
       this.render?.animateOpponent(() => this.render?.invalidatePlayerLevel(this.combatEngine.player));
     };
 
     this.combatEngine.onPlayerExecutesMove = () => {
+      if (!this.alive) {
+        return;
+      }
+
       this.render?.animatePlayer(() => this.render?.invalidateOpponentLevel(this.combatEngine.opponent));
     };
   }

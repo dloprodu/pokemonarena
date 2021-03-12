@@ -59,6 +59,10 @@ export class ArenaBasicPage extends ArenaBasePage implements OnInit, OnDestroy, 
     super(pokeApi, rankingManager);
 
     this.combatEngine.onOpponentExecutesMove = () => {
+      if (!this.alive) {
+        return;
+      }
+
       this.animateCSS(this.opponentEl.nativeElement, 'animate__bounce');
 
       this.playerDetailEl.nativeElement.classList.add('damage');
@@ -66,6 +70,10 @@ export class ArenaBasicPage extends ArenaBasePage implements OnInit, OnDestroy, 
     };
 
     this.combatEngine.onPlayerExecutesMove = () => {
+      if (!this.alive) {
+        return;
+      }
+
       this.animateCSS(this.playerEl.nativeElement, 'animate__bounce');
 
       this.opponentDetailEl.nativeElement.classList.add('damage');

@@ -6,7 +6,7 @@ import { StorageService } from './storage';
 type ThemeType = 'dark' | 'light';
 
 /**
- * @file theme-manager.service.js
+ * @file theme-manager.js
  * @summary Theme manager service.
  * @description
  *

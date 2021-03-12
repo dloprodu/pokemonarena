@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 /**
- * @file storage.service.js
+ * @file storage.js
  * @summary Storage service.
  * @description
  *

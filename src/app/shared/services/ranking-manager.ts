@@ -16,7 +16,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 /**
- * @file RankingManagerService.ts
+ * @file ranking-manager.ts
  * @summary Ranking API service.
  * @description
  *

@@ -29,7 +29,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { mergeMap, map, tap } from 'rxjs/operators';
 
 /**
- * @file PokeApiService.ts
+ * @file pokeapi.ts
  * @summary Poke API service.
  * @description
  *

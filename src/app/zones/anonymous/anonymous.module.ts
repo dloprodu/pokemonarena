@@ -7,7 +7,11 @@ import { SharedModule } from '@app/shared/shared.module';
 import { AnonymousRoutingModule } from './anonymous.routing.module';
 
 import * as pages from './pages';
+import * as components from './components';
 
+const componentsList = [
+  components.LiveUserViewerComponent
+];
 
 const pagesList = [
   pages.SetupPage,
@@ -26,6 +30,7 @@ const pagesList = [
     AnonymousRoutingModule,
   ],
   declarations: [
+    ...componentsList,
     ...pagesList
   ],
 })

@@ -30,6 +30,12 @@ export const environment = {
           'Content-Type': 'application/json'
         },
       },
+      liveAPI: {
+        baseUrl: 'http://localhost:3001',
+        defaultHeaders: {
+          'Content-Type': 'application/json'
+        },
+      },
       translations: {
         baseUrl: '/assets/i18n',
       }

@@ -6,14 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ContextService, StorageService, PokeApiService, ThemeManagerService, RankingManagerService } from './services';
+import { ContextService, StorageService, PokeApiService, ThemeManagerService, RankingManagerService, LiveGameService } from './services';
 
 const servicesList = [
   ContextService,
-  StorageService,
+  LiveGameService,
   PokeApiService,
   RankingManagerService,
-  ThemeManagerService
+  StorageService,
+  ThemeManagerService,
 ];
 
 /**
@@ -52,6 +53,12 @@ export class SharedModule {
           deps: [ThemeManagerService],
           multi: true
         },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: LiveGameInitializer,
+          deps: [LiveGameService],
+          multi: true
+        },
       ]
     };
   }
@@ -71,6 +78,15 @@ export function CoreInitializer(context: ContextService) {
 export function ThemeInitializer(theme: ThemeManagerService) {
   const fn = async () => {
     theme.load();
+  };
+
+  return fn;
+}
+
+
+export function LiveGameInitializer(live: LiveGameService) {
+  const fn = async () => {
+    live.init();
   };
 
   return fn;

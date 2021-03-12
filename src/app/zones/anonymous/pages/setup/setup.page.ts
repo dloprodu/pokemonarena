@@ -5,12 +5,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PageComponent } from '@app/shared';
+import { PageComponent, LiveGameService, LiveUser } from '@app/shared';
 import { PokeApiService, ContextService, ThemeManagerService, RankingManagerService } from '@app/shared/services';
 import { Language, User } from '@app/shared/models';
 
 import { of } from 'rxjs';
-import { mergeMap, finalize } from 'rxjs/operators';
+import { mergeMap, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -29,34 +29,33 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   //#region Fields
 
+  // - Theme settings
   themes = [
-    {
-      label: 'dark',
-      value: 'dark',
-    },
-    {
-      label: 'light',
-      value: 'light'
-    }
+    { label: 'dark', value: 'dark' },
+    { label: 'light', value: 'light' }
   ];
-
-  languages: Language[] = [];
-
-  renders = [
-    {
-      label: 'HTML',
-      value: 'html',
-    },
-    {
-      label: 'Canvas',
-      value: 'canvas'
-    }
-  ];
-
-  language = this.context.instance.language;
   theme = this.themeManager.getTheme();
-  render = 'html';
+
+  // - Language settings
+  languages: Language[] = [];
+  language = this.context.instance.language;
+
+  // - Renders settings
+  renders = [
+    { label: 'HTML', value: 'html' },
+    { label: 'Canvas', value: 'canvas' }
+  ];
+  render: 'html' | 'canvas' = 'html';
+
+  // - Game mode settings
+  gameModes = [
+    { label: '1 vs COM', value: '1vsCOM' },
+    { label: '1 vs 1', value: '1vs1' }
+  ];
+  gameMode: '1vsCOM' | '1vs1' = '1vsCOM';
+
   alias = '';
+  aliasInUse = false;
   loading = false;
 
   //#endregion
@@ -65,6 +64,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   constructor(
     private context: ContextService,
+    public live: LiveGameService,
     private pokeApi: PokeApiService,
     private themeManager: ThemeManagerService,
     private rankingManager: RankingManagerService,
@@ -87,6 +87,13 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
       }, err => {
         console.error(err);
       });
+
+    this.live
+      .aliasInUse
+      .pipe(
+        takeWhile(() => this.alive)
+      )
+      .subscribe(() => this.aliasInUse = true);
   }
 
   ngOnDestroy() {
@@ -135,6 +142,10 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     // this.nativeLanguage = this.languages.find(lang => lang.code === this.context.instance.language).name;
 
     window.location.href = `${window.location.origin}/${this.language}`;
+  }
+
+  onSignInLiveClick() {
+    this.live.signIn(this.alias);
   }
 
   onPlayClick() {

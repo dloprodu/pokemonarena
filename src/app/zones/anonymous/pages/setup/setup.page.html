@@ -26,6 +26,14 @@
       </select>
     </div>
     <div class="form-group">
+      <label for="game-mode-selector">{{ 'choose-game-move' | translate }}</label>
+      <select class="form-control" id="game-mode-selector" name="mode" [(ngModel)]="gameMode">
+        <ng-template ngFor let-item [ngForOf]="gameModes">
+          <option [value]="item.value" >{{ item.label | translate }}</option>
+        </ng-template>
+      </select>
+    </div>
+    <div class="form-group">
       <label for="user-alias">{{ 'user-alias' | translate }}</label>
       <input #username="ngModel" class="form-control" id="user-alias" name="alias"
         [(ngModel)]="alias"
@@ -34,15 +42,33 @@
         minlength="3"
         maxlength="20">
       <small class="text-danger" *ngIf="username.invalid">{{ 'user-alias-not-valid' | translate }}</small>
+      <small class="text-danger" *ngIf="aliasInUse && !live.logged">{{ 'alias-already-in-use' | translate}}</small>
     </div>
-    <button type="submit" [disabled]="username.invalid || loading" class="btn btn-secondary btn-lg" (click)="onPlayClick()">
-      <span class="d-flex align-items-center" *ngIf="loading">
-        <span class="spinner-border spinner-border-sm p-1" role="status">
-          <span class="sr-only"></span>
+    <div class="overflow-auto mb-2" *ngIf="gameMode === '1vs1'">
+      <live-user-viewer></live-user-viewer>
+    </div>
+    <ng-template [ngIf]="gameMode === '1vsCOM' || live.logged" [ngIfElse]="signInLive">
+      <button type="submit"
+        [disabled]="username.invalid || loading"
+        [class.d-none]="gameMode === '1vs1'"
+        class="btn btn-secondary btn-block btn-lg"
+        (click)="onPlayClick()">
+        <span class="d-flex align-items-center" *ngIf="loading">
+          <span class="spinner-border spinner-border-sm p-1" role="status">
+            <span class="sr-only"></span>
+          </span>
+          <strong class="ml-2">{{ 'loading' | translate }}</strong>
         </span>
-        <strong class="ml-2">{{ 'loading' | translate }}</strong>
-      </span>
-      <span *ngIf="!loading">{{ 'play' | translate }}</span>
-    </button>
+        <span *ngIf="!loading">{{ 'play' | translate }}</span>
+      </button>
+    </ng-template>
+    <ng-template #signInLive>
+      <button type="button"
+        class="btn btn-primary btn-block btn-lg"
+        [disabled]="username.invalid" 
+        (click)="onSignInLiveClick()">
+        {{ 'sign-in-live' | translate}}
+      </button>
+    </ng-template>
   </form>
 </div>
