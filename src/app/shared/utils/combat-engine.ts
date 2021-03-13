@@ -39,6 +39,10 @@ export class CombatEngine {
     return this.turnOwner === 'player';
   }
 
+  get initiating(): boolean {
+    return this._state === 'none' || this._state === 'initiating';
+  }
+
   get initiated(): boolean {
     return this._state === 'initiated';
   }
@@ -136,8 +140,13 @@ export class CombatEngine {
   public initLiveOpponent(opponent: Competitor) {
     this._opponent = opponent;
 
-    if (this._state === 'initiating') {
-      this._state = 'initiated';
+    switch (this._state) {
+      case 'initiating':
+        this._state = 'initiated';
+        break;
+      case 'none':
+        this._state = 'initiating';
+        break;
     }
   }
 

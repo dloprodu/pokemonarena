@@ -1,5 +1,5 @@
 <div class="attacks-box text-body" *ngIf="!combatEngine.finished">
-  <div class="list-group" *ngIf="combatEngine.player?.moves; else pleaseWait">
+  <div class="list-group" *ngIf="!combatEngine.initiating; else pleaseWait">
     <ng-template [ngIf]="(combatEngine.player?.moves?.length || 0) > 0 && (combatEngine.opponent?.moves?.length || 0) > 0" [ngIfElse]="notValidCombat">
       <ng-template ngFor let-move [ngForOf]="combatEngine.player?.moves" >
         <button type="button"
