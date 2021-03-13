@@ -7,7 +7,7 @@ import { Competitor } from './competitor';
 
 type GameModeType = '1vsCOM' | '1vs1';
 type TurnOwnerType = 'player' | 'opponent';
-type GameStateType = 'none' | 'initiated' | 'finished';
+type GameStateType = 'none' | 'initiating' | 'initiated' | 'finished';
 
 /**
  * Class responsible for managing a combat.
@@ -99,9 +99,10 @@ export class CombatEngine {
   public init(
     player: { pokemon: Pokemon | null, moves: PokemonMove[] },
     opponent: { pokemon: Pokemon | null, moves: PokemonMove[] },
-    typeInfoList: PokemonTypeInfo[]
+    typeInfoList: PokemonTypeInfo[],
+    mode: GameModeType = '1vsCOM'
   ) {
-    if (player.pokemon == null || opponent.pokemon == null) {
+    if (player.pokemon == null || (mode == '1vsCOM' && opponent.pokemon == null)) {
       throw new Error('Unable to init the combat');
     }
 
@@ -112,20 +113,31 @@ export class CombatEngine {
       moves: this.selectMoves(player.moves)
     };
 
-    this._opponent = {
-      pokemon: opponent.pokemon,
-      level: 350,
-      maxLevel: 350,
-      moves: this.selectMoves(opponent.moves)
-    };
+    if (mode === '1vsCOM') {
+      this._opponent = {
+        pokemon: opponent.pokemon,
+        level: 350,
+        maxLevel: 350,
+        moves: this.selectMoves(opponent.moves)
+      };
+    }
 
     this._typeInfoList = typeInfoList;
     this._turnOwner = Math.random() > 0.5 ? 'opponent' : 'player';
-    this._state = 'initiated';
+    this._state = this._opponent != null ? 'initiated' : 'initiating';
     this._score = 0;
+    this._mode = mode;
 
     if (this.mode === '1vsCOM') {
       setTimeout(() => this.executeOpponentMove(), 500);
+    }
+  }
+
+  public initLiveOpponent(opponent: Competitor) {
+    this._opponent = opponent;
+
+    if (this._state === 'initiating') {
+      this._state = 'initiated';
     }
   }
 

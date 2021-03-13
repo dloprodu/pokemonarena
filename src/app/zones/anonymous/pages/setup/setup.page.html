@@ -45,7 +45,7 @@
       <small class="text-danger" *ngIf="aliasInUse && !live.logged">{{ 'alias-already-in-use' | translate}}</small>
     </div>
     <div class="overflow-auto mb-2" *ngIf="gameMode === '1vs1'">
-      <live-user-viewer></live-user-viewer>
+      <live-user-viewer (acceptRequestClick)="onAcceptLiveRequestClick()"></live-user-viewer>
     </div>
     <ng-template [ngIf]="gameMode === '1vsCOM' || live.logged" [ngIfElse]="signInLive">
       <button type="submit"

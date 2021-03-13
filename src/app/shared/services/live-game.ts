@@ -3,10 +3,20 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from '@env/environment';
 
 import { io, Socket } from 'socket.io-client';
+
+import { Competitor } from '../utils/competitor';
+
 import { Observable, ReplaySubject } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
-export type LiveUser = { alias: string, loggedAt: string; battlefieldId: string, waitingResponseFrom: string; attendingRequestTo: string }
+export type LiveUser = {
+  alias: string,
+  loggedAt: string;
+  battlefieldId: string;
+  waitingResponseFrom: string;
+  attendingRequestTo: string;
+}
+
 type LiveUserResponse = { users: LiveUser[] }
 type LoggedResponse = { alias: string, users: LiveUser[] }
 
@@ -75,6 +85,7 @@ export class LiveGameService {
   readonly acceptedRequest = new EventEmitter<string>();
   readonly rejectedRequest = new EventEmitter<string>();
   readonly opponentDisconnected = new EventEmitter();
+  readonly opponentReady = new EventEmitter<Competitor>();
 
   //#endregion
 
@@ -121,10 +132,10 @@ export class LiveGameService {
     }
 
     if (this.logged) {
-      this.socket?.emit('remove user', alias);
+      this.socket?.emit('sign out', alias);
     }
 
-    this.socket?.emit('add user', alias);
+    this.socket?.emit('sign in', alias);
   }
 
   getLiveUsers(): Observable<LiveUser[]> {
@@ -152,6 +163,14 @@ export class LiveGameService {
     this._requestTimer = 0;
     this.socket?.emit('reject request', this._opponent);
     this._opponent = '';
+  }
+
+  leaveBattle() {
+    this.socket?.emit('leave battle');
+  }
+
+  playerReady(data: Competitor) {
+    this.socket?.emit('player ready', data);
   }
 
   //#endregion
@@ -182,6 +201,7 @@ export class LiveGameService {
       this.socket.on('play request', this.onPlayRequest);
       this.socket.on('accepted request', this.onAcceptedRequest);
       this.socket.on('rejected request', this.onRejectedRequest);
+      this.socket.on('opponent ready', this.onOpponentReady);
 
       // this.socket.emit('fetch users');
       console.log('live game socket connected....');
@@ -287,6 +307,10 @@ export class LiveGameService {
     clearInterval(this._requestTimerRef);
     this._requestTimer = 0;
     this.rejectedRequest.emit(data.from);
+  }
+
+  private onOpponentReady = (data: Competitor) => {
+    this.opponentReady.emit(data);
   }
 
   //#endregion

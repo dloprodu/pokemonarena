@@ -6,10 +6,11 @@ import {
   OnDestroy,
   AfterViewInit
 } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { ActivatedRoute } from '@angular/router';
 
-import { PokeApiService, RankingManagerService } from '@app/shared';
+import { PokeApiService, RankingManagerService, LiveGameService } from '@app/shared';
 import { PokemonMove } from '@app/shared/models';
 
 import { ArenaBasePage } from '../arena-base-page';
@@ -37,26 +38,37 @@ export class ArenaBasicPage extends ArenaBasePage implements OnInit, OnDestroy, 
     return 'Arena Basic';
   }
 
+  //#endregion
+
+  //#region ArenaBasePage Properties
+
   get userId(): string {
     return this._userId;
+  }
+
+  get isLive(): boolean {
+    return this._isLive;
   }
 
   //#endregion
 
   //#region Fields
 
-  private _userId;
+  private _userId: string;
+  private _isLive: boolean;
 
   //#endregion
 
   //#region Constructor
 
   constructor(
+    location: Location,
     pokeApi: PokeApiService,
     rankingManager: RankingManagerService,
+    live: LiveGameService,
     private route: ActivatedRoute
   ) {
-    super(pokeApi, rankingManager);
+    super(location, pokeApi, rankingManager, live);
 
     this.combatEngine.onOpponentExecutesMove = () => {
       if (!this.alive) {
@@ -86,9 +98,10 @@ export class ArenaBasicPage extends ArenaBasePage implements OnInit, OnDestroy, 
   //#region Lifecycle Hooks
 
   ngOnInit() {
-    super.ngOnInit();
-
     this._userId = this.route.snapshot.queryParams.userId;
+    this._isLive = this.route.snapshot.queryParams.live == 'true';
+
+    super.ngOnInit();
   }
 
   ngOnDestroy() {

@@ -25,7 +25,7 @@ export class LiveUserViewerComponent extends BaseComponent implements OnChanges,
 
   //#region Outputs
 
-  @Output() readonly ready = new EventEmitter();
+  @Output() readonly acceptRequestClick = new EventEmitter();
 
   //#endregion
 
@@ -81,6 +81,7 @@ export class LiveUserViewerComponent extends BaseComponent implements OnChanges,
 
   onAcceptRequest() {
     this.live.acceptRequest();
+    this.acceptRequestClick.emit();
   }
 
   onRejectRequest() {

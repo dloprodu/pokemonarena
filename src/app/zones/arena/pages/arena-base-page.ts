@@ -5,16 +5,23 @@ import {
   AfterViewInit,
   ViewChild,
 } from '@angular/core';
+import { Location } from '@angular/common';
 
-import { PageComponent, PokeApiService, RankingManagerService } from '@app/shared';
+import {
+  PageComponent,
+  PokeApiService,
+  RankingManagerService,
+  LiveGameService
+} from '@app/shared';
 import { PokemonMove } from '@app/shared/models';
 
 import { CombatEngine } from '@app/shared/utils/combat-engine';
+import { Competitor } from '@app/shared/utils/competitor';
 
 import { RankingTableComponent } from '../components/ranking-table/ranking-table';
 
 import { combineLatest, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, takeWhile } from 'rxjs/operators';
 
 @Directive()
 export abstract class ArenaBasePage extends PageComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -30,14 +37,17 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   public readonly combatEngine = new CombatEngine();
   public showCountdown = true;
   public abstract get userId(): string;
+  public abstract get isLive(): boolean;
 
   //#endregion
 
   //#region Constructor
 
   constructor(
+    protected location: Location,
     protected pokeApi: PokeApiService,
-    protected rankingManager: RankingManagerService
+    protected rankingManager: RankingManagerService,
+    protected live: LiveGameService
   ) {
     super();
   }
@@ -49,6 +59,27 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   ngOnInit() {
     super.ngOnInit();
 
+    this.live
+      .opponentDisconnected
+      .pipe(
+        takeWhile(() => this.alive && this.isLive)
+      ).subscribe(() => {
+        alert('The opponent has left the game');
+        this.location.back();
+      });
+    
+    this.live
+      .opponentReady
+      .pipe(
+        takeWhile(() => this.alive && this.isLive)
+      ).subscribe((opponent: Competitor) => {
+        this.combatEngine.initLiveOpponent(opponent);
+
+        if (this.combatEngine.initiated) {
+          this.onCombatEngineLoaded();
+        }
+      });
+
     this.load();
   }
 
@@ -56,6 +87,10 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
     super.ngOnDestroy();
 
     this.combatEngine?.reset();
+
+    if (this.isLive) {
+      this.live.leaveBattle();
+    }
   }
 
   ngAfterViewInit() {
@@ -91,23 +126,31 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
       }
     };
 
+    // If it is a 1vs1, we dont't load the opponent data.
+    // We expect to receive the opponent data from the live service.
     this.pokeApi
-      .getPokemonList(1000)
+      .getPokemonList(500)
       .pipe(
         mergeMap(result => {
           const player1 = result[Math.floor(Math.random() * result.length)];
-          const player2 = result[Math.floor(Math.random() * result.length)];
+          const player2 = !this.isLive
+            ? result[Math.floor(Math.random() * result.length)]
+            : '';
 
           return combineLatest([
             this.pokeApi.getPokemon(player1),
-            this.pokeApi.getPokemon(player2),
+            !this.isLive
+              ? this.pokeApi.getPokemon(player2)
+              : of(null),
           ]).pipe(
             mergeMap(([p1, p2]) => {
               return combineLatest([
                 of(p1),
                 this.pokeApi.getPokemonMovesList(p1?.moves ?? []),
                 of(p2),
-                this.pokeApi.getPokemonMovesList(p2?.moves ?? []),
+                !this.isLive
+                  ? this.pokeApi.getPokemonMovesList(p2?.moves ?? [])
+                  : of([]),
                 this.pokeApi.getPokemonTypeInfoList()
               ]);
             })
@@ -118,13 +161,20 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
         this.combatEngine.init(
           { pokemon: p1, moves: m1 },
           { pokemon: p2, moves: m2 },
-          typeInfoList
+          typeInfoList,
+          this.isLive ? '1vs1' : '1vsCOM'
         );
+
+        if (this.isLive) {
+          this.live.playerReady(this.combatEngine.player);
+        }
 
         console.log(this.combatEngine.player);
         console.log(this.combatEngine.opponent);
 
-        this.onCombatEngineLoaded();
+        if (!this.isLive || this.combatEngine.initiated) {
+          this.onCombatEngineLoaded();
+        }        
       }, err => {
         console.error(err);
       });

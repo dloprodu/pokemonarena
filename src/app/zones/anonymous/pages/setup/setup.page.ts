@@ -5,12 +5,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PageComponent, LiveGameService, LiveUser } from '@app/shared';
+import { PageComponent, LiveGameService } from '@app/shared';
 import { PokeApiService, ContextService, ThemeManagerService, RankingManagerService } from '@app/shared/services';
 import { Language, User } from '@app/shared/models';
 
-import { of } from 'rxjs';
-import { mergeMap, takeWhile } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { mergeMap, takeWhile, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -94,6 +94,13 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
         takeWhile(() => this.alive)
       )
       .subscribe(() => this.aliasInUse = true);
+
+    this.live
+      .acceptedRequest
+      .pipe(
+        takeWhile(() => this.alive)
+      )
+      .subscribe(() => this.onAcceptLiveRequestClick());
   }
 
   ngOnDestroy() {
@@ -112,20 +119,37 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   //#region Helpers
 
-  private navigateToGamePage(user: User | null) {
+  private navigateToGamePage(user: User | null, live = false) {
     switch (this.render) {
       case 'html':
         this.router.navigate([`/${this.context.instance.language}/arena/arena-html`], {
-          queryParams: { userId: user?.id }
+          queryParams: { userId: user?.id, ...(live ? { live: true } : {}) }
         });
         break;
 
       case 'canvas':
         this.router.navigate([`/${this.context.instance.language}/arena/arena-canvas`], {
-          queryParams: { userId: user?.id }
+          queryParams: { userId: user?.id, ...(live ? { live: true } : {}) }
         });
         break;
     }
+  }
+
+  private getUser(): Observable<User> {
+    this.loading = true;
+
+    return this.rankingManager
+      .getUser(this.alias)
+      .pipe(
+        mergeMap(user => {
+          if (user == null) {
+            return this.rankingManager.createUser(this.alias);
+          }
+
+          return of(user);
+        }),
+        finalize(() => this.loading = false)
+      );
   }
 
   //#endregion
@@ -149,25 +173,23 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   }
 
   onPlayClick() {
-    this.loading = true;
-
-    this.rankingManager
-      .getUser(this.alias)
-      .pipe(
-        mergeMap(user => {
-          if (user == null) {
-            return this.rankingManager.createUser(this.alias);
-          }
-
-          return of(user);
-        }),
-        // finalize(() => this.loading = false)
-      ).subscribe(user => {
+    this.getUser()
+      .subscribe(user => {
         this.navigateToGamePage(user);
       }, err => {
         // If something was wrong, we simply navigate to the game without alias
         this.navigateToGamePage(null);
       });
+  }
+
+  onAcceptLiveRequestClick() {
+    this.getUser()
+      .subscribe(user => {
+        this.navigateToGamePage(user, true);
+      }, err => {
+        // If something was wrong, we simply navigate to the game without alias
+        this.navigateToGamePage(null, true);
+      })
   }
 
   //#endregion
