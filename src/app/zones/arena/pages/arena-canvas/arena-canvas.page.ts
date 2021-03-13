@@ -93,7 +93,7 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
 
   ngOnInit() {
     this._userId = this.route.snapshot.queryParams.userId;
-    this._isLive = this.route.snapshot.queryParams.live == 'true';
+    this._isLive = this.route.snapshot.queryParams.live === 'true';
 
     super.ngOnInit();
   }

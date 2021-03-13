@@ -15,42 +15,80 @@ type GameStateType = 'none' | 'initiating' | 'initiated' | 'finished';
 export class CombatEngine {
   //#region Properties
 
+  /**
+   * Game mode ('1vs1' or '1vsCOM')
+   */
   get mode(): GameModeType {
     return this._mode;
   }
 
+  /**
+   * Defines the player data.
+   *  - level
+   *  - maxLevel
+   *  - pokemon
+   *  - move list
+   */
   get player(): Competitor | null {
     return this._player;
   }
 
+  /**
+   * Defines the opponent data.
+   *  - level
+   *  - maxLevel
+   *  - pokemon
+   *  - move list
+   */
   get opponent(): Competitor | null {
     return this._opponent;
   }
 
+  /**
+   * Contains the damage relations list between types.
+   */
   get typeInfoList(): PokemonTypeInfo[] {
     return this._typeInfoList;
   }
 
+  /**
+   * Turn owner ('player' or 'opponent').
+   */
   get turnOwner(): TurnOwnerType {
     return this._turnOwner;
   }
 
+  /**
+   * Flag tha indicates if the player has the turn.
+   */
   get playerHasTurn(): boolean {
     return this.turnOwner === 'player';
   }
 
+  /**
+   * Flag tha indicates if the battle is initiating.
+   */
   get initiating(): boolean {
     return this._state === 'none' || this._state === 'initiating';
   }
 
+  /**
+   * Flag tha indicates if the battle is initiated.
+   */
   get initiated(): boolean {
     return this._state === 'initiated';
   }
 
+  /**
+   * Flag tha indicates if the battle is finished.
+   */
   get finished(): boolean {
     return this._state === 'finished';
   }
 
+  /**
+   * Player score.
+   */
   get score(): number {
     return this._score;
   }
@@ -98,7 +136,9 @@ export class CombatEngine {
   //#region Methods
 
   /**
-   * Inits the combat.
+   * Inits the combat. In '1vs1' mode, if the player hasn't receive the
+   * opponent data, the engine will stay in the 'initiating' state until
+   * receive the opponent data.
    */
   public init(
     player: { pokemon: Pokemon | null, moves: PokemonMove[] },
@@ -106,7 +146,7 @@ export class CombatEngine {
     typeInfoList: PokemonTypeInfo[],
     mode: GameModeType = '1vsCOM'
   ) {
-    if (player.pokemon == null || (mode == '1vsCOM' && opponent.pokemon == null)) {
+    if (player.pokemon == null || (mode === '1vsCOM' && opponent.pokemon == null)) {
       throw new Error('Unable to init the combat');
     }
 
@@ -137,6 +177,9 @@ export class CombatEngine {
     }
   }
 
+  /**
+   * In '1vs1' mode, allows to set the opponent data.
+   */
   public initLiveOpponent(opponent: Competitor) {
     this._opponent = opponent;
 
@@ -150,6 +193,9 @@ export class CombatEngine {
     }
   }
 
+  /**
+   * Resets the state of the engine.
+   */
   public reset() {
     this._player = null;
     this._opponent = null;

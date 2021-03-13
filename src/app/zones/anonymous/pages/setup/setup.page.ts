@@ -189,7 +189,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
       }, err => {
         // If something was wrong, we simply navigate to the game without alias
         this.navigateToGamePage(null, true);
-      })
+      });
   }
 
   //#endregion

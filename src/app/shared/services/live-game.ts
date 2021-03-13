@@ -15,10 +15,10 @@ export type LiveUser = {
   battlefieldId: string;
   waitingResponseFrom: string;
   attendingRequestTo: string;
-}
+};
 
-type LiveUserResponse = { users: LiveUser[] }
-type LoggedResponse = { alias: string, users: LiveUser[] }
+type LiveUserResponse = { users: LiveUser[] };
+type LoggedResponse = { alias: string, users: LiveUser[] };
 
 type RequestTimerType = 'request' | 'attend-request' | 'turn';
 
@@ -185,7 +185,7 @@ export class LiveGameService {
       this.socket.on('disconnect', () => this.reset());
 
       // Once event
-      this.socket.once('max turn time', this.onMaxTurnTime)
+      this.socket.once('max turn time', this.onMaxTurnTime);
 
       // General messages
       this.socket.on('message', this.onMessage);
@@ -258,7 +258,7 @@ export class LiveGameService {
         this.opponentDisconnected.emit();
         break;
     }
-  };
+  }
 
   private onMaxTurnTime = (data: { time: number }) => {
     this._maxTurnTime = data.time;
@@ -272,16 +272,16 @@ export class LiveGameService {
     this._logged = true;
     this._alias = data.alias;
     this._liveUsers.next(data.users);
-  };
+  }
 
   private onSignedOut = (data: LoggedResponse) => {
     this._logged = false;
     this._liveUsers.next(data.users);
-  };
+  }
 
   private onUserJoined = (data: LiveUserResponse) => {
     this._liveUsers.next(data.users);
-  };
+  }
 
   private onUserLeft = (data: LiveUserResponse) => {
     this._liveUsers.next(data.users);

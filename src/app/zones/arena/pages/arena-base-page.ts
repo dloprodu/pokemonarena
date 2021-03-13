@@ -72,7 +72,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
         alert('The opponent has left the game');
         this.location.back();
       });
-    
+
     this.live
       .opponentReady
       .pipe(
@@ -179,7 +179,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
 
         if (!this.isLive || this.combatEngine.initiated) {
           this.onCombatEngineLoaded();
-        }        
+        }
       }, err => {
         console.error(err);
       });

@@ -49,7 +49,7 @@ export class LiveUserViewerComponent extends BaseComponent implements OnChanges,
 
   ngOnInit() {
     super.ngOnInit();
-    
+
     this.live
       .getLiveUsers()
       .pipe(
