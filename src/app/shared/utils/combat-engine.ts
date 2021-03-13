@@ -183,7 +183,7 @@ export class CombatEngine {
 
     // Check if the combat has finished
     if (this.opponent.level === 0) {
-      this._score += 1000;
+      this._score += this._mode === '1vsCOM' ? 1000 : 3000;
       this.finish();
       return;
     }

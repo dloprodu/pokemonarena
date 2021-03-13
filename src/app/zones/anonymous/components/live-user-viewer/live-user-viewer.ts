@@ -56,7 +56,7 @@ export class LiveUserViewerComponent extends BaseComponent implements OnChanges,
         takeWhile(() => this.alive)
       )
       .subscribe(users => {
-        this.liveUsers = users;
+        this.liveUsers = users.filter(u => u.alias !== this.live.alias);
       });
   }
 

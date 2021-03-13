@@ -139,7 +139,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     return this.rankingManager
-      .getUser(this.alias)
+      .getUser(this.gameMode === '1vs1' ? this.live.alias : this.alias)
       .pipe(
         mergeMap(user => {
           if (user == null) {

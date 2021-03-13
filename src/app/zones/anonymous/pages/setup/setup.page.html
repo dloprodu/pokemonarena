@@ -33,7 +33,7 @@
         </ng-template>
       </select>
     </div>
-    <div class="form-group">
+    <div class="form-group" [class.d-none]="gameMode === '1vs1' && live.logged">
       <label for="user-alias">{{ 'user-alias' | translate }}</label>
       <input #username="ngModel" class="form-control" id="user-alias" name="alias"
         [(ngModel)]="alias"
@@ -44,6 +44,7 @@
       <small class="text-danger" *ngIf="username.invalid">{{ 'user-alias-not-valid' | translate }}</small>
       <small class="text-danger" *ngIf="aliasInUse && !live.logged">{{ 'alias-already-in-use' | translate}}</small>
     </div>
+    <h4 *ngIf="gameMode === '1vs1' && live.logged">{{ 'logged-as' | translate }}: <b>{{ live.alias }}</b></h4>
     <div class="overflow-auto mb-2" *ngIf="gameMode === '1vs1'">
       <live-user-viewer (acceptRequestClick)="onAcceptLiveRequestClick()"></live-user-viewer>
     </div>

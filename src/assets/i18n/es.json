@@ -22,11 +22,12 @@
   "date": "Date",
   "score": "Score",
   "loading": "Cargando ...",
-  "not_live_users": "No hay usuarios en vivo ahora, intento mas tarde...",
+  "not_live_users": "No hay usuarios en vivo ahora, por favor, espere mientras alguien se conecta...",
   "sign-in-live": "Regístrese en el juego en vivo",
   "play-request": "Enviar solicitud de juego",
   "alias-already-in-use": "El alias ya está en uso",
   "accept": "Aceptar",
   "reject": "Rechazar",
-  "user-busy": "Usuario ocupardo..."
+  "user-busy": "Usuario ocupardo...",
+  "logged-as": "Registrado como"
 }

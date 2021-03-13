@@ -22,11 +22,12 @@
   "date": "Fecha",
   "score": "Puntuación",
   "loading": "Loading ...",
-  "not_live_users": "There aren't live users right now, try it later...",
+  "not_live_users": "There aren't live users right now, please wait until someone is online...",
   "sign-in-live": "Sign in live",
   "play-request": "Send play request",
   "alias-already-in-use": "The alias is already in use",
   "accept": "Accept",
   "reject": "Reject",
-  "user-busy": "User busy..."
+  "user-busy": "User busy...",
+  "logged-as": "Logged as"
 }

@@ -59,6 +59,11 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   ngOnInit() {
     super.ngOnInit();
 
+    if (this.isLive && (!this.live.logged || !this.live.opponent)) {
+      this.location.back();
+      return;
+    }
+
     this.live
       .opponentDisconnected
       .pipe(
