@@ -72,4 +72,20 @@ export class LiveUserViewerComponent extends BaseComponent implements OnChanges,
   }
 
   //#endregion
+
+  //#region Event Handlers
+
+  onSendRequest(user: LiveUser) {
+    this.live.sendPlayRequest(user);
+  }
+
+  onAcceptRequest() {
+    this.live.acceptRequest();
+  }
+
+  onRejectRequest() {
+    this.live.rejectRequest();
+  }
+
+  //#endregion
 }

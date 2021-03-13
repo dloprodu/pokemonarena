@@ -11,9 +11,42 @@
           <th scope="row">{{ i + 1 }}</th>
           <td>{{ user.loggedAt | date:'hh:mm' }}</td>
           <td>{{ user.alias }}</td>
-          <td class="text-right">
-            <button [disabled]="!live.logged" [class.d-none]="user.alias === live.alias" class="btn btn-sm btn-info">
-              {{ 'play-request' | translate}}
+          <td class="text-right" *ngIf="!user.battlefieldId">
+            <!-- Template to show the button to send request -->
+            <ng-template [ngIf]="!live.hasPendingRequest || user.alias !== live.opponent">
+              <button 
+                [disabled]="!live.logged || live.hasPendingRequest || user.waitingResponseFrom || user.attendingRequestTo"
+                [class.d-none]="user.alias === live.alias"
+                class="btn btn-sm"
+                [class.btn-info]="!(user.waitingResponseFrom || user.attendingRequestTo)"
+                [class.btn-warning]="(user.waitingResponseFrom || user.attendingRequestTo)"
+                (click)="onSendRequest(user)"
+                >
+                <span *ngIf="!(user.waitingResponseFrom || user.attendingRequestTo)">{{ 'play-request' | translate }}</span>
+                <span *ngIf="(user.waitingResponseFrom || user.attendingRequestTo)">{{ 'user-busy' | translate }}</span>
+              </button>
+            </ng-template>
+            <!-- Template to show the request timer -->
+            <ng-template [ngIf]="live.hasPendingRequest && user.alias === live.opponent && live.requestTimerType === 'request'">
+              <h5 class="d-inline"><span class="badge badge-danger">{{ live.requestTime }}</span></h5>
+            </ng-template>
+            <!-- Template to show the attend request buttons and timer -->
+            <ng-template [ngIf]="live.hasPendingRequest && user.alias === live.opponent && live.requestTimerType === 'attend-request'">
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-sm btn-info" (click)="onAcceptRequest()">
+                  {{ 'accept' | translate }}
+                </button>
+                <button class="btn btn-sm btn-secondary" (click)="onRejectRequest()">
+                  {{ 'reject' | translate }}
+                </button>
+              </div>
+              <h5 class="d-inline"><span class="ml-1 badge badge-danger">{{ live.requestTime }}</span></h5>
+            </ng-template>
+          </td>
+          <!-- Template to show the users that are busy playing a battle -->
+          <td class="text-right" *ngIf="user.battlefieldId">
+            <button [disabled]="true" class="btn btn-sm btn-warning">
+              {{ user.battlefieldId }}
             </button>
           </td>
         </tr>

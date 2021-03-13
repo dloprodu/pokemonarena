@@ -52,7 +52,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     { label: '1 vs COM', value: '1vsCOM' },
     { label: '1 vs 1', value: '1vs1' }
   ];
-  gameMode: '1vsCOM' | '1vs1' = '1vsCOM';
+  gameMode: '1vsCOM' | '1vs1' = '1vs1';
 
   alias = '';
   aliasInUse = false;

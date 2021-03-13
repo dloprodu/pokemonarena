@@ -25,5 +25,8 @@
   "not_live_users": "There aren't live users right now, try it later...",
   "sign-in-live": "Sign in live",
   "play-request": "Send play request",
-  "alias-already-in-use": "The alias is already in use"
+  "alias-already-in-use": "The alias is already in use",
+  "accept": "Accept",
+  "reject": "Reject",
+  "user-busy": "User busy..."
 }
