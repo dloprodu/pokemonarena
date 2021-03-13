@@ -31,7 +31,7 @@ export const environment = {
         },
       },
       liveAPI: {
-        baseUrl: 'http://localhost:3001',
+        baseUrl: 'https://pokearenalive.azurewebsites.net',
         defaultHeaders: {
           'Content-Type': 'application/json'
         },
