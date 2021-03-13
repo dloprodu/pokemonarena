@@ -162,6 +162,9 @@ export class LiveGameService {
     try {
       this.socket = io(this.liveApi.baseUrl);
 
+      this.socket.on('connect', () => this.reset());
+      this.socket.on('disconnect', () => this.reset());
+
       // Once event
       this.socket.once('max turn time', this.onMaxTurnTime)
 
@@ -204,6 +207,18 @@ export class LiveGameService {
         this._opponent = '';
       }
     }, 1000);
+  }
+
+  //#endregion
+
+  //#region Helpers
+
+  private reset() {
+    this._logged = false;
+    this._opponent = '';
+    this._opponent = '';
+    this._requestTimer = 0;
+    clearInterval(this._requestTimerRef);
   }
 
   //#endregion
