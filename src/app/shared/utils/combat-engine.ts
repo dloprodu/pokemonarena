@@ -329,7 +329,7 @@ export class CombatEngine {
     //   }
     // }
 
-    return move.power * dx;
+    return Math.floor(move.power * dx);
   }
 
   /**
