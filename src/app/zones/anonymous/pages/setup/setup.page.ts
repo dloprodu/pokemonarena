@@ -5,11 +5,14 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PageComponent, LiveGameService } from '@app/shared';
+import { PageComponent, LiveGameService, StorageService } from '@app/shared';
 import { PokeApiService, ContextService, ThemeManagerService } from '@app/shared/services';
 import { Language } from '@app/shared/models';
 
 import { takeWhile } from 'rxjs/operators';
+
+type GameModeType = '1vsCOM' | '1vs1';
+type GameRenderType = 'html' | 'canvas';
 
 @Component({
   selector: 'page-setup',
@@ -44,14 +47,14 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     { label: 'HTML', value: 'html' },
     { label: 'Canvas', value: 'canvas' }
   ];
-  render: 'html' | 'canvas' = 'html';
+  render: GameRenderType = 'html';
 
   // - Game mode settings
   gameModes = [
     { label: '1 vs COM', value: '1vsCOM' },
     { label: '1 vs 1', value: '1vs1' }
   ];
-  gameMode: '1vsCOM' | '1vs1' = '1vsCOM';
+  gameMode: GameModeType = this.storage.get('game-mode', '1vsCOM') as GameModeType;
 
   alias = '';
   aliasInUse = false;
@@ -66,7 +69,8 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     public live: LiveGameService,
     private pokeApi: PokeApiService,
     private themeManager: ThemeManagerService,
-    private router: Router
+    private router: Router,
+    private storage: StorageService
   ) {
     super();
   }
@@ -118,6 +122,8 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   //#region Helpers
 
   private navigateToGamePage(alias: string, live = false) {
+    this.storage.set('game-mode', this.gameMode);
+
     switch (this.render) {
       case 'html':
         this.router.navigate([`/${this.context.instance.language}/arena/arena-html`], {

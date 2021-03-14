@@ -256,6 +256,11 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   //#region Events Handlers
 
   onReload() {
+    // If showCountdown true, the game is already loading...
+    if (this.showCountdown) {
+      return;
+    }
+
     if (this.isLive) {
       this.live.reloadBattle();
     }
