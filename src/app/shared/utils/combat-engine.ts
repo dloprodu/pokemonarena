@@ -231,6 +231,8 @@ export class CombatEngine {
     this.opponent.level = Math.max(0, this.opponent.level - damage);
     this._score += damage;
 
+    console.log(` Execute move: opponent level ${this.opponent.level}` );
+
     // Notify that the player has executed the moved. That is util, for example, if the UI component wants to apply
     // some animation.
     setTimeout(() => {
@@ -268,6 +270,8 @@ export class CombatEngine {
 
     const damage = this.calculateDamage(this.opponent, this.player, move);
     this.player.level = Math.max(0, this.player.level - damage);
+
+    console.log(` Receive move: my level ${this.player.level}` );
 
     // Notify that the opponent has executed the moved. That is util, for example, if the UI component wants to apply
     // some animation.
@@ -318,12 +322,12 @@ export class CombatEngine {
     // Generate a random number as a simple way of considering the move accuracy.
     // - An accuracy of 100% always will be successful.
     // - An accuracy of 10% always will rarely be effective and it will fail.
-    if (move.accuracy != null) {
-      const f = Math.floor(Math.random() * 100);
-      if (f > move.accuracy) {
-        dx = 0;
-      }
-    }
+    // if (move.accuracy != null) {
+    //   const f = Math.floor(Math.random() * 100);
+    //   if (f > move.accuracy) {
+    //     dx = 0;
+    //   }
+    // }
 
     return move.power * dx;
   }
