@@ -6,11 +6,10 @@ import {
 import { Router } from '@angular/router';
 
 import { PageComponent, LiveGameService } from '@app/shared';
-import { PokeApiService, ContextService, ThemeManagerService, RankingManagerService } from '@app/shared/services';
-import { Language, User } from '@app/shared/models';
+import { PokeApiService, ContextService, ThemeManagerService } from '@app/shared/services';
+import { Language } from '@app/shared/models';
 
-import { Observable, of } from 'rxjs';
-import { mergeMap, takeWhile, finalize, timeout } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -52,7 +51,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     { label: '1 vs COM', value: '1vsCOM' },
     { label: '1 vs 1', value: '1vs1' }
   ];
-  gameMode: '1vsCOM' | '1vs1' = '1vs1';
+  gameMode: '1vsCOM' | '1vs1' = '1vsCOM';
 
   alias = '';
   aliasInUse = false;
@@ -67,7 +66,6 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
     public live: LiveGameService,
     private pokeApi: PokeApiService,
     private themeManager: ThemeManagerService,
-    private rankingManager: RankingManagerService,
     private router: Router
   ) {
     super();
