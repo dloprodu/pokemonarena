@@ -237,6 +237,7 @@ export class LiveGameService {
    * Send a message to notify that the player has left the battle.
    */
   leaveBattle() {
+    this.stopTimer();
     this.socket?.emit('leave battle');
   }
 
@@ -269,6 +270,11 @@ export class LiveGameService {
    */
   initTurnTimer() {
     this.initRequestTimer('turn');
+  }
+
+  stopTimer() {
+    this._requestTimer = 0;
+    clearInterval(this._requestTimerRef);
   }
 
   //#endregion
@@ -312,6 +318,8 @@ export class LiveGameService {
   }
 
   private initRequestTimer(type: RequestTimerType) {
+    this.stopTimer();
+
     this._requestTimerType = type;
     this._requestTimer = this._maxTurnTime;
     this._requestTimerRef = setInterval(() => {
@@ -344,11 +352,6 @@ export class LiveGameService {
     this.stopTimer();
   }
 
-  private stopTimer() {
-    this._requestTimer = 0;
-    clearInterval(this._requestTimerRef);
-  }
-
   //#endregion
 
   //#region Socket Event Handlers
@@ -363,6 +366,7 @@ export class LiveGameService {
         break;
 
       case 'opponent disconnected':
+        this.stopTimer();
         this.opponentDisconnected.emit();
         break;
     }
@@ -406,14 +410,12 @@ export class LiveGameService {
   }
 
   private onAcceptedRequest = (data: { from: string }) => {
-    clearInterval(this._requestTimerRef);
-    this._requestTimer = 0;
+    this.stopTimer();
     this.acceptedRequest.emit(data.from);
   }
 
   private onRejectedRequest = (data: { from: string }) => {
-    clearInterval(this._requestTimerRef);
-    this._requestTimer = 0;
+    this.stopTimer();
     this.rejectedRequest.emit(data.from);
   }
 
@@ -426,6 +428,7 @@ export class LiveGameService {
   }
 
   private onResetTurn = (owner: string) => {
+    this.stopTimer();
     this._initialTurnOwner = owner;
     this.resetTurn.emit(owner);
   }

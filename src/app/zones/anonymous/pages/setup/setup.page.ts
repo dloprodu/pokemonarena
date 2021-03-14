@@ -107,6 +107,7 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     super.ngOnDestroy();
+    this.live.stopTimer();
   }
 
   //#endregion

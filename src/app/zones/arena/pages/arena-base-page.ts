@@ -127,6 +127,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
     super.ngOnDestroy();
 
     this.combatEngine?.reset();
+    this.live.stopTimer();
 
     if (this.isLive) {
       this.live.leaveBattle();
