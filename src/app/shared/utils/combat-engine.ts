@@ -144,7 +144,8 @@ export class CombatEngine {
     player: { pokemon: Pokemon | null, moves: PokemonMove[] },
     opponent: { pokemon: Pokemon | null, moves: PokemonMove[] },
     typeInfoList: PokemonTypeInfo[],
-    mode: GameModeType = '1vsCOM'
+    mode: GameModeType = '1vsCOM',
+    turnOwner?: TurnOwnerType
   ) {
     if (player.pokemon == null || (mode === '1vsCOM' && opponent.pokemon == null)) {
       throw new Error('Unable to init the combat');
@@ -167,7 +168,9 @@ export class CombatEngine {
     }
 
     this._typeInfoList = typeInfoList;
-    this._turnOwner = Math.random() > 0.5 ? 'opponent' : 'player';
+    this._turnOwner = turnOwner == null
+      ? Math.random() > 0.5 ? 'opponent' : 'player'
+      : turnOwner;
     this._state = this._opponent != null ? 'initiated' : 'initiating';
     this._score = 0;
     this._mode = mode;
@@ -203,6 +206,17 @@ export class CombatEngine {
     this._score = 0;
     clearTimeout(this._timers.turnTimer);
     clearTimeout(this._timers.opponent1vsCOMTimer);
+  }
+
+  /**
+   * Sets the turn to the opponent.
+   */
+  public loseTurn() {
+    this._turnOwner = 'opponent';
+  }
+
+  public takeTurn() {
+    this._turnOwner = 'player';
   }
 
   /**

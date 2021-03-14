@@ -41,8 +41,8 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
 
   //#region ArenaBasePage Properties
 
-  get userId(): string {
-    return this._userId;
+  get alias(): string {
+    return this._alias;
   }
 
   get isLive(): boolean {
@@ -53,7 +53,7 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
 
   //#region Fields
 
-  private _userId: string;
+  private _alias: string;
   private _isLive: boolean;
   private render?: BattlefieldRender;
 
@@ -92,7 +92,7 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
   //#region Lifecycle Hooks
 
   ngOnInit() {
-    this._userId = this.route.snapshot.queryParams.userId;
+    this._alias = this.route.snapshot.queryParams.userId;
     this._isLive = this.route.snapshot.queryParams.live === 'true';
 
     super.ngOnInit();
@@ -122,6 +122,7 @@ export class ArenaCanvasPage extends ArenaBasePage implements OnInit, OnDestroy,
   //#region ArenaBasePage Methods
 
   protected onCombatEngineLoaded(): void {
+    super.onCombatEngineLoaded();
     this.render?.init({ player: this.combatEngine.player, opponent: this.combatEngine.opponent });
   }
 

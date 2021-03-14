@@ -20,6 +20,22 @@
     font-weight: bold;
     z-index: 2;
   }
+  
+  .battlefield-turn-timer {
+    display: inline-block;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 1rem;
+    background:rgba(194, 87, 87, 0.8);
+    border: 2px solid rgb(194, 87, 87);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    z-index: 2;
+  }
 
   canvas {
     position: absolute;

@@ -10,7 +10,7 @@ import { PokeApiService, ContextService, ThemeManagerService, RankingManagerServ
 import { Language, User } from '@app/shared/models';
 
 import { Observable, of } from 'rxjs';
-import { mergeMap, takeWhile, finalize } from 'rxjs/operators';
+import { mergeMap, takeWhile, finalize, timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'page-setup',
@@ -119,37 +119,20 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
 
   //#region Helpers
 
-  private navigateToGamePage(user: User | null, live = false) {
+  private navigateToGamePage(alias: string, live = false) {
     switch (this.render) {
       case 'html':
         this.router.navigate([`/${this.context.instance.language}/arena/arena-html`], {
-          queryParams: { userId: user?.id, ...(live ? { live: true } : {}) }
+          queryParams: { alias, ...(live ? { live: true } : {}) }
         });
         break;
 
       case 'canvas':
         this.router.navigate([`/${this.context.instance.language}/arena/arena-canvas`], {
-          queryParams: { userId: user?.id, ...(live ? { live: true } : {}) }
+          queryParams: { alias, ...(live ? { live: true } : {}) }
         });
         break;
     }
-  }
-
-  private getUser(): Observable<User> {
-    this.loading = true;
-
-    return this.rankingManager
-      .getUser(this.gameMode === '1vs1' ? this.live.alias : this.alias)
-      .pipe(
-        mergeMap(user => {
-          if (user == null) {
-            return this.rankingManager.createUser(this.alias);
-          }
-
-          return of(user);
-        }),
-        finalize(() => this.loading = false)
-      );
   }
 
   //#endregion
@@ -173,23 +156,11 @@ export class SetupPage extends PageComponent implements OnInit, OnDestroy {
   }
 
   onPlayClick() {
-    this.getUser()
-      .subscribe(user => {
-        this.navigateToGamePage(user);
-      }, err => {
-        // If something was wrong, we simply navigate to the game without alias
-        this.navigateToGamePage(null);
-      });
+    this.navigateToGamePage(this.alias);
   }
 
   onAcceptLiveRequestClick() {
-    this.getUser()
-      .subscribe(user => {
-        this.navigateToGamePage(user, true);
-      }, err => {
-        // If something was wrong, we simply navigate to the game without alias
-        this.navigateToGamePage(null, true);
-      });
+    this.navigateToGamePage(this.live.alias, true);
   }
 
   //#endregion

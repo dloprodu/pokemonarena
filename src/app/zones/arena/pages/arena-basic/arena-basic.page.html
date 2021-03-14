@@ -9,6 +9,9 @@
         <span *ngIf="combatEngine.playerHasTurn">{{ 'player_has_turn' | translate }}</span>
         <span *ngIf="!combatEngine.playerHasTurn">{{ 'opponent_has_turn' | translate }}</span>
       </div>
+      <div class="battlefield-turn-timer" *ngIf="isLive && combatEngine.playerHasTurn && combatEngine.initiated">
+        {{ live.requestTime }}
+      </div>
       <div class="player" *ngIf="combatEngine.player">
         <img #player [src]="combatEngine.player.pokemon.sprites.back">
       </div>
@@ -31,6 +34,6 @@
     </move-picker>
   </div>
   <div class="flex-grow-1">
-    <ranking-table [userId]="userId" [style.height.px]="680"></ranking-table>
+    <ranking-table [userId]="user?.id" [style.height.px]="680"></ranking-table>
   </div>
 </div>

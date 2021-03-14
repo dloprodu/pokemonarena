@@ -76,16 +76,66 @@ export class LiveGameService {
     return this._requestTimer / 1000;
   }
 
+  /**
+   * Initial turn owner;
+   */
+  get initialTurnOwner(): string {
+    return this._initialTurnOwner;
+  }
+
   //#endregion
 
   //#region Events
 
+  /**
+   * Event emitted when the alias is already in use for another live user.
+   */
   readonly aliasInUse = new EventEmitter();
+
+  /**
+   * Event emitted the user receive a 'play request' from a live user.
+   */
   readonly playRequest = new EventEmitter<string>();
+
+  /**
+   * Event emitted when a live user has accepted a 'play request'.
+   */
   readonly acceptedRequest = new EventEmitter<string>();
+
+  /**
+   * Event emitted when a live user has rejected a 'play request'.
+   */
   readonly rejectedRequest = new EventEmitter<string>();
+
+  /**
+   * Event emitted when an opponent disconnects from the battle.
+   */
   readonly opponentDisconnected = new EventEmitter();
+
+  /**
+   * Event emitted when an opponent is ready to the battle and has sent its data.
+   */
   readonly opponentReady = new EventEmitter<Competitor>();
+
+  /**
+   * Event emitted when the player asks the opponent to reload the battle.
+   */
+  readonly reloadBattleRequest = new EventEmitter();
+
+  /**
+   * Event emitted at the beginning of a battle to set the turn owner.
+   */
+  readonly resetTurn = new EventEmitter<string>();
+
+  /**
+   * Event emitted when the opponent send a movement or louse its turn.
+   */
+  readonly moveReceived = new EventEmitter<number>();
+
+  /**
+   * Event emitted when the player lose its turn by timeout.
+   */
+  readonly timeout = new EventEmitter();
 
   //#endregion
 
@@ -98,6 +148,7 @@ export class LiveGameService {
   private _logged = false;
   private _alias = '';
   private _opponent: string;
+  private _initialTurnOwner: string;
 
   // - Request timers
   private _requestTimer = 0;
@@ -118,10 +169,16 @@ export class LiveGameService {
 
   //#region Methods
 
+  /**
+   * Setup the socket connection.
+   */
   init() {
     this.setupSocketConnection();
   }
 
+  /**
+   * Sign in as user in the live service.
+   */
   signIn(alias: string) {
     if (!alias?.trim()) {
       return;
@@ -138,10 +195,17 @@ export class LiveGameService {
     this.socket?.emit('sign in', alias);
   }
 
+  /**
+   * Returns an observable that will emit the live users whenever
+   * they are updated.
+   */
   getLiveUsers(): Observable<LiveUser[]> {
     return this._liveUsers$;
   }
 
+  /**
+   * Allows sending a play request to another live user.
+   */
   sendPlayRequest(user: LiveUser) {
     if (this._requestTimer) {
       return;
@@ -152,25 +216,59 @@ export class LiveGameService {
     this.initRequestTimer('request');
   }
 
+  /**
+   * Allows to accept a play request.
+   */
   acceptRequest() {
-    clearInterval(this._requestTimerRef);
-    this._requestTimer = 0;
+    this.stopTimer();
     this.socket?.emit('accept request', this._opponent);
   }
 
+  /**
+   * Allows to reject a play request.
+   */
   rejectRequest() {
-    clearInterval(this._requestTimerRef);
-    this._requestTimer = 0;
+    this.stopTimer();
     this.socket?.emit('reject request', this._opponent);
     this._opponent = '';
   }
 
+  /**
+   * Send a message to notify that the player has left the battle.
+   */
   leaveBattle() {
     this.socket?.emit('leave battle');
   }
 
+  /**
+   * Send a message to notify the opponent that the player is ready and
+   * attach the player data.
+   */
   playerReady(data: Competitor) {
     this.socket?.emit('player ready', data);
+  }
+
+  /**
+   * Send a message to ask the opponent to reload the battle
+   * and send us its new data.
+   */
+  reloadBattle() {
+    this.socket?.emit('reload battle');
+  }
+
+  /**
+   * Send a movement to the opponent.
+   */
+  sendMove(index: number) {
+    this.stopTimer();
+    this.socket?.emit('move', index);
+  }
+
+  /**
+   * Inits the turn timer.
+   */
+  initTurnTimer() {
+    this.initRequestTimer('turn');
   }
 
   //#endregion
@@ -202,6 +300,9 @@ export class LiveGameService {
       this.socket.on('accepted request', this.onAcceptedRequest);
       this.socket.on('rejected request', this.onRejectedRequest);
       this.socket.on('opponent ready', this.onOpponentReady);
+      this.socket.on('reload battle', this.onReloadBattle);
+      this.socket.on('reset turn', this.onResetTurn);
+      this.socket.on('move', this.onMoveReceived);
 
       // this.socket.emit('fetch users');
       console.log('live game socket connected....');
@@ -217,14 +318,17 @@ export class LiveGameService {
       this._requestTimer -= 1000;
 
       if (this._requestTimer <= 0) {
-        this._requestTimer = 0;
-        clearInterval(this._requestTimerRef);
+        this.stopTimer();
 
         if (this._requestTimerType === 'attend-request') {
           this.rejectRequest();
+          this._opponent = '';
         }
 
-        this._opponent = '';
+        if (this._requestTimerType === 'turn') {
+          this.timeout.emit();
+          this.sendMove(undefined);
+        }
       }
     }, 1000);
   }
@@ -237,6 +341,10 @@ export class LiveGameService {
     this._logged = false;
     this._opponent = '';
     this._opponent = '';
+    this.stopTimer();
+  }
+
+  private stopTimer() {
     this._requestTimer = 0;
     clearInterval(this._requestTimerRef);
   }
@@ -311,6 +419,19 @@ export class LiveGameService {
 
   private onOpponentReady = (data: Competitor) => {
     this.opponentReady.emit(data);
+  }
+
+  private onReloadBattle = () => {
+    this.reloadBattleRequest.emit();
+  }
+
+  private onResetTurn = (owner: string) => {
+    this._initialTurnOwner = owner;
+    this.resetTurn.emit(owner);
+  }
+
+  private onMoveReceived = (index) => {
+    this.moveReceived.emit(index);
   }
 
   //#endregion
