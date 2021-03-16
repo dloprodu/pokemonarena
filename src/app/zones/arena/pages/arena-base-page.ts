@@ -248,7 +248,7 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
 
           return of(user);
         }),
-        timeout(5000)
+        timeout(10000)
       ).subscribe(user => this.user = user);
   }
 
