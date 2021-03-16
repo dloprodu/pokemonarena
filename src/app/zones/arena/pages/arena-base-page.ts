@@ -238,8 +238,14 @@ export abstract class ArenaBasePage extends PageComponent implements OnInit, OnD
   //#region Helpers
 
   private loadUser() {
+    const alias = this.isLive ? this.live.alias : this.alias;
+
+    if (!alias?.trim()) {
+      return;
+    }
+
     this.rankingManager
-      .getUser(this.isLive ? this.live.alias : this.alias)
+      .getUser(alias)
       .pipe(
         mergeMap(user => {
           if (user == null) {
